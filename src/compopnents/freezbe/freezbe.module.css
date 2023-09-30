@@ -17,13 +17,29 @@
 
 .addButton {
   padding: 10px 20px;
-  background-color: aqua;
+  background-color: yellow;
   cursor: pointer;
   border: none;
   color: black;
-  border-radius: 5px;
+  border-radius: 10px;
+  width: 200px;
+  margin-bottom: 10px;
 }
 
 .addButton:hover {
-  background-color: rgb(152, 152, 223);
+  background-color: rgb(240, 240, 113);
+}
+
+.error {
+  color: red;
+}
+
+@media screen and (max-width: 768px) {
+  .inputContainer {
+    margin-bottom: 0;
+  }
+
+  .inputContainer input {
+    width: 300px;
+  }
 }

@@ -26,13 +26,12 @@
 }
 
 .msCard:hover {
-  background-color: rgb(152, 152, 223);
-  color: white;
+  background-color: rgb(240, 240, 113);
   cursor: pointer;
 }
 
 .active {
-  background-color: aqua;
+  background-color: yellow;
 }
 
 .active::before {
@@ -48,8 +47,12 @@
 }
 
 @media screen and (max-width: 768px) {
-    .active::before {
-        top: 45.5%;
-        left: 47.5%;
-    }
+  .active::before {
+    top: 45.5%;
+    left: 47.5%;
+  }
+
+  .titles {
+    margin-bottom: 35px;
+  }
 }
