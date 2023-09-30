@@ -1,6 +1,27 @@
 import classes from "./table.module.css";
 
-function Table({ data }) {
+function Table({ modelData, setModelData, setData, setModifyMode, setIndex }) {
+  const modifyHandler = (mode, index) => {
+    setModifyMode(true);
+    setData({
+      name: mode.name,
+      description: mode.description,
+      unitPrice: mode.unitPrice,
+      range: mode.range,
+      ingredients: mode.ingredients,
+      weight: mode.weight,
+    });
+    setIndex(index);
+  };
+
+  const handleDelete = (index) => {
+    setModelData((prevData) => {
+      const updateModel = [...prevData];
+      updateModel.splice(index, 1);
+      return updateModel;
+    });
+  };
+
   return (
     <div className={classes.tableContainer}>
       <table>
@@ -17,7 +38,7 @@ function Table({ data }) {
           </tr>
         </thead>
         <tbody>
-          {data?.map((model, index) => (
+          {modelData?.map((model, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{model.name}</td>
@@ -27,8 +48,18 @@ function Table({ data }) {
               <td>{model.ingredients}</td>
               <td>{model.weight}</td>
               <td>
-                <button className={classes.modifyButton}>Modify</button>
-                <button className={classes.deleteButton}>Delete</button>
+                <button
+                  className={classes.modifyButton}
+                  onClick={() => modifyHandler(model, index)}
+                >
+                  Modify
+                </button>
+                <button
+                  className={classes.deleteButton}
+                  onClick={() => handleDelete(index)}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}

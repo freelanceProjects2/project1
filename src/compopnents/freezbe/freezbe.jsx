@@ -16,7 +16,7 @@ function Freezbe() {
       name: "asda",
       description: "adww",
       unitPrice: "12",
-      range: "13",
+      range: "20",
       ingredients: "asd",
       weight: "44",
     },
@@ -45,7 +45,6 @@ function Freezbe() {
     ingredients: "",
     weight: "",
   });
-
   const [error, setError] = useState({
     name: "",
     description: "",
@@ -54,11 +53,16 @@ function Freezbe() {
     ingredients: "",
     weight: "",
   });
+  const [modifyMode, setModifyMode] = useState(false);
+  const [index, setIndex] = useState();
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setData((prevState) => ({ ...prevState, [name]: value }));
+
+    setError((prevState) => ({ ...prevState, [name]: "" }));
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -76,6 +80,12 @@ function Freezbe() {
         name: "Name should be at least 3 characters",
       }));
       emptyFields.push("Name");
+    } else if (typeof data.name === "number") {
+      setError((prevData) => ({
+        ...prevData,
+        name: "Name should be a string",
+      }));
+      emptyFields.push("Name");
     }
 
     if (data.description.length === 0) {
@@ -88,6 +98,12 @@ function Freezbe() {
       setError((prevData) => ({
         ...prevData,
         description: "Description should be at least 3 characters",
+      }));
+      emptyFields.push("Description");
+    } else if (typeof data.description === "number") {
+      setError((prevData) => ({
+        ...prevData,
+        description: "Description should be a string",
       }));
       emptyFields.push("Description");
     }
@@ -126,10 +142,16 @@ function Freezbe() {
         ingredients: "Please enter ingredients",
       }));
       emptyFields.push("Ingredients");
-    } else if (data.ingredients.length >= 3) {
+    } else if (data.ingredients.length < 3) {
       setError((prevData) => ({
         ...prevData,
-        ingredients: "Ranfe should be maximum 2 numbers",
+        ingredients: "Ingredients should be at least 3 characters",
+      }));
+      emptyFields.push("Ingredients");
+    } else if (typeof data.ingredients === "number") {
+      setError((prevData) => ({
+        ...prevData,
+        ingredients: "Ingredients should be a string",
       }));
       emptyFields.push("Ingredients");
     }
@@ -151,6 +173,48 @@ function Freezbe() {
     if (emptyFields.length > 0) {
       return;
     }
+
+    if (!modifyMode) {
+      modelData.push({
+        name: data.name,
+        description: data.description,
+        unitPrice: data.unitPrice,
+        range: data.range,
+        ingredients: data.ingredients,
+        weight: data.weight,
+      });
+
+      setData({
+        name: "",
+        description: "",
+        unitPrice: "",
+        range: "",
+        ingredients: "",
+        weight: "",
+      });
+
+      return;
+    }
+
+    modelData.splice(index, 1, {
+      name: data.name,
+      description: data.description,
+      unitPrice: data.unitPrice,
+      range: data.range,
+      ingredients: data.ingredients,
+      weight: data.weight,
+    });
+
+    setModifyMode(false);
+
+    setData({
+      name: "",
+      description: "",
+      unitPrice: "",
+      range: "",
+      ingredients: "",
+      weight: "",
+    });
   };
 
   return (
@@ -235,11 +299,20 @@ function Freezbe() {
             )}
           </div>
         </div>
-        <button type="submit" className={classes.addButton}>
-          Add
+        <button
+          type="submit"
+          className={`${modifyMode ? classes.modifyButton : classes.addButton}`}
+        >
+          {modifyMode ? "Modify" : "Add"}
         </button>
       </form>
-      <Table data={modelData} />
+      <Table
+        modelData={modelData}
+        setModelData={setModelData}
+        setData={setData}
+        setModifyMode={setModifyMode}
+        setIndex={setIndex}
+      />
     </div>
   );
 }

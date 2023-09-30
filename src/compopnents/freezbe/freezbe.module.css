@@ -15,7 +15,8 @@
   outline: none;
 }
 
-.addButton {
+.addButton,
+.modifyButton {
   padding: 10px 20px;
   background-color: yellow;
   cursor: pointer;
@@ -23,7 +24,7 @@
   color: black;
   border-radius: 10px;
   width: 200px;
-  margin-bottom: 10px ;
+  margin-bottom: 10px;
 }
 
 .addButton:hover {
@@ -34,6 +35,15 @@
   color: red;
 }
 
+.modifyButton {
+  background-color: #1f65ff;
+  color: white;
+}
+
+.modifyButton:hover {
+  background-color: #5d90ff;
+}
+
 @media screen and (max-width: 768px) {
   .inputContainer {
     margin-bottom: 0;
@@ -42,5 +52,9 @@
 
   .inputContainer input {
     width: 300px;
+  }
+
+  .addButton, .modifyButton {
+    margin-top: 10px;
   }
 }
