@@ -1,0 +1,29 @@
+.inputContainer {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.inputContainer input {
+  width: 400px;
+  margin: 5px;
+  padding: 15px 15px;
+  border-radius: 10px;
+}
+
+.inputContainer input:focus {
+  outline: none;
+}
+
+.addButton {
+  padding: 10px 20px;
+  background-color: aqua;
+  cursor: pointer;
+  border: none;
+  color: black;
+  border-radius: 5px;
+}
+
+.addButton:hover {
+  background-color: rgb(152, 152, 223);
+}
