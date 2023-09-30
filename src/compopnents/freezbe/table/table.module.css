@@ -1,0 +1,38 @@
+table {
+  width: 100%;
+  font-size: 25px;
+  border-collapse: collapse;
+}
+
+.modifyButton,
+.deleteButton {
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  border: 0;
+  color: white;
+}
+
+.modifyButton {
+  background-color: #1f65ff;
+  margin-right: 5px;
+}
+
+.modifyButton:hover {
+  background-color: #5d90ff;
+}
+
+.deleteButton {
+  background-color: red;
+}
+
+.deleteButton:hover{
+    background-color: rgb(252, 96, 96);
+}
+
+@media screen and (max-width: 768px) {
+  .tableContainer {
+    margin: 10px 10px 10px 20px;
+  }
+}

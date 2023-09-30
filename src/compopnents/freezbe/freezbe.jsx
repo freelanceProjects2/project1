@@ -3,6 +3,40 @@ import classes from "./freezbe.module.css";
 import Table from "./table/table";
 
 function Freezbe() {
+  const [modelData, setModelData] = useState([
+    {
+      name: "asda",
+      description: "adww",
+      unitPrice: "12",
+      range: "13",
+      ingredients: "asd",
+      weight: "44",
+    },
+    {
+      name: "asda",
+      description: "adww",
+      unitPrice: "12",
+      range: "13",
+      ingredients: "asd",
+      weight: "44",
+    },
+    {
+      name: "asda",
+      description: "adww",
+      unitPrice: "12",
+      range: "13",
+      ingredients: "asd",
+      weight: "44",
+    },
+    {
+      name: "asda",
+      description: "adww",
+      unitPrice: "12",
+      range: "13",
+      ingredients: "asd",
+      weight: "44",
+    },
+  ]);
   const [data, setData] = useState({
     name: "",
     description: "",
@@ -205,7 +239,7 @@ function Freezbe() {
           Add
         </button>
       </form>
-      <Table data={data} />
+      <Table data={modelData} />
     </div>
   );
 }
