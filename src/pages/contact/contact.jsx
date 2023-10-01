@@ -1,4 +1,4 @@
-import Classes from "./contact.module.css"
+import classes from "./contact.module.css"
 
 function Contact() {
   return <div>Contact</div>;

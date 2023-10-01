@@ -1,42 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import classes from "./freezbe.module.css";
 import Table from "./table/table";
 
 function Freezbe() {
-  const [modelData, setModelData] = useState([
-    {
-      name: "asda",
-      description: "adww",
-      unitPrice: "12",
-      range: "13",
-      ingredients: "asd",
-      weight: "44",
-    },
-    {
-      name: "asda",
-      description: "adww",
-      unitPrice: "12",
-      range: "20",
-      ingredients: "asd",
-      weight: "44",
-    },
-    {
-      name: "asda",
-      description: "adww",
-      unitPrice: "12",
-      range: "13",
-      ingredients: "asd",
-      weight: "44",
-    },
-    {
-      name: "asda",
-      description: "adww",
-      unitPrice: "12",
-      range: "13",
-      ingredients: "asd",
-      weight: "44",
-    },
-  ]);
+  const [modelData, setModelData] = useState(() => {
+    const savedModelDataJSON = localStorage.getItem("modelData");
+    console.log("savedModelDataJSON", JSON.parse(savedModelDataJSON));
+    return savedModelDataJSON ? JSON.parse(savedModelDataJSON) : [];
+  });
+
   const [data, setData] = useState({
     name: "",
     description: "",
@@ -55,6 +27,16 @@ function Freezbe() {
   });
   const [modifyMode, setModifyMode] = useState(false);
   const [index, setIndex] = useState();
+
+  useEffect(() => {
+    console.log("useEffect triggered");
+    try {
+      const modelDataJSON = JSON.stringify(modelData);
+      localStorage.setItem("modelData", modelDataJSON);
+    } catch (error) {
+      console.error("Error saving data to localStorage:", error);
+    }
+  }, [modelData]);
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -175,14 +157,17 @@ function Freezbe() {
     }
 
     if (!modifyMode) {
-      modelData.push({
-        name: data.name,
-        description: data.description,
-        unitPrice: data.unitPrice,
-        range: data.range,
-        ingredients: data.ingredients,
-        weight: data.weight,
-      });
+      setModelData([
+        ...modelData,
+        {
+          name: data.name,
+          description: data.description,
+          unitPrice: data.unitPrice,
+          range: data.range,
+          ingredients: data.ingredients,
+          weight: data.weight,
+        },
+      ]);
 
       setData({
         name: "",
@@ -196,14 +181,18 @@ function Freezbe() {
       return;
     }
 
-    modelData.splice(index, 1, {
+    // Update an existing item
+    const updatedModelData = [...modelData];
+    updatedModelData[index] = {
       name: data.name,
       description: data.description,
       unitPrice: data.unitPrice,
       range: data.range,
       ingredients: data.ingredients,
       weight: data.weight,
-    });
+    };
+
+    setModelData(updatedModelData);
 
     setModifyMode(false);
 
