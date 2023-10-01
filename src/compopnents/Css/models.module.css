@@ -48,6 +48,10 @@
   background-color: #5d90ff;
 }
 
+.testValidations{
+  display: contents;
+}
+
 @media screen and (max-width: 768px) {
   .inputContainer {
     margin-bottom: 0;
