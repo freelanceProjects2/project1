@@ -27,6 +27,10 @@
   margin-bottom: 10px;
 }
 
+.searchBar input{
+  width: 100%;
+}
+
 .addButton:hover {
   background-color: rgb(240, 240, 113);
 }

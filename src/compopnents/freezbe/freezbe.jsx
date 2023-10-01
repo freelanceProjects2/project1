@@ -17,6 +17,7 @@ function Freezbe() {
     ingredients: "",
     weight: "",
   });
+  const [searchText, setSearchText] = useState("");
   const [error, setError] = useState({
     name: "",
     description: "",
@@ -27,6 +28,17 @@ function Freezbe() {
   });
   const [modifyMode, setModifyMode] = useState(false);
   const [index, setIndex] = useState();
+
+  const [filteredModelData, setFilteredModelData] = useState([]);
+
+  useEffect(() => {
+    // Filter the data based on the search text
+    const newData = modelData.filter(
+      (item) =>
+        item.name && item.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilteredModelData(newData);
+  }, [modelData, searchText]);
 
   useEffect(() => {
     console.log("useEffect triggered");
@@ -206,103 +218,123 @@ function Freezbe() {
     });
   };
 
+  const handleSearch = (e) => {
+    setSearchText(e.target.value);
+  };
+
   return (
-    <div>
-      {/* First pair of inputs */}
-      <form onSubmit={handleSubmit}>
-        <div className={classes.inputContainer}>
-          <div>
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              value={data.name}
-              onChange={handleFormChange}
-            />
-            {error.name && <div className={classes.error}>{error.name}</div>}
+    <>
+      <div>
+        {/* First pair of inputs */}
+        <form onSubmit={handleSubmit}>
+          <div className={classes.inputContainer}>
+            <div>
+              <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                value={data.name}
+                onChange={handleFormChange}
+              />
+              {error.name && <div className={classes.error}>{error.name}</div>}
+            </div>
+            <div>
+              <input
+                type="text"
+                name="description"
+                placeholder="Description"
+                value={data.description}
+                onChange={handleFormChange}
+              />
+              {error.description && (
+                <div className={classes.error}>{error.description}</div>
+              )}
+            </div>
           </div>
-          <div>
-            <input
-              type="text"
-              name="description"
-              placeholder="Description"
-              value={data.description}
-              onChange={handleFormChange}
-            />
-            {error.description && (
-              <div className={classes.error}>{error.description}</div>
-            )}
-          </div>
-        </div>
 
-        {/* Second pair of inputs */}
-        <div className={classes.inputContainer}>
-          <div>
-            <input
-              type="number"
-              name="unitPrice"
-              placeholder="Unit Price"
-              value={data.unitPrice}
-              onChange={handleFormChange}
-            />
-            {error.unitPrice && (
-              <div className={classes.error}>{error.unitPrice}</div>
-            )}
+          {/* Second pair of inputs */}
+          <div className={classes.inputContainer}>
+            <div>
+              <input
+                type="number"
+                name="unitPrice"
+                placeholder="Unit Price"
+                value={data.unitPrice}
+                onChange={handleFormChange}
+              />
+              {error.unitPrice && (
+                <div className={classes.error}>{error.unitPrice}</div>
+              )}
+            </div>
+            <div>
+              <input
+                type="number"
+                name="range"
+                placeholder="Range"
+                value={data.range}
+                onChange={handleFormChange}
+              />
+              {error.range && (
+                <div className={classes.error}>{error.range}</div>
+              )}
+            </div>
           </div>
-          <div>
-            <input
-              type="number"
-              name="range"
-              placeholder="Range"
-              value={data.range}
-              onChange={handleFormChange}
-            />
-            {error.range && <div className={classes.error}>{error.range}</div>}
-          </div>
-        </div>
 
-        {/* Third pair of inputs */}
-        <div className={classes.inputContainer}>
-          <div>
+          {/* Third pair of inputs */}
+          <div className={classes.inputContainer}>
+            <div>
+              <input
+                type="text"
+                name="ingredients"
+                placeholder="Ingredients (comma separated)"
+                value={data.ingredients}
+                onChange={handleFormChange}
+              />
+              {error.ingredients && (
+                <div className={classes.error}>{error.ingredients}</div>
+              )}
+            </div>
+            <div>
+              <input
+                type="number"
+                name="weight"
+                placeholder="Weight"
+                value={data.weight}
+                onChange={handleFormChange}
+              />
+              {error.weight && (
+                <div className={classes.error}>{error.weight}</div>
+              )}
+            </div>
+          </div>
+          <div className={`${classes.searchBar} ${classes.inputContainer}`}>
             <input
               type="text"
-              name="ingredients"
-              placeholder="Ingredients (comma separated)"
-              value={data.ingredients}
-              onChange={handleFormChange}
+              name="search"
+              placeholder="Search by name"
+              value={searchText}
+              onChange={handleSearch}
             />
-            {error.ingredients && (
-              <div className={classes.error}>{error.ingredients}</div>
-            )}
           </div>
-          <div>
-            <input
-              type="number"
-              name="weight"
-              placeholder="Weight"
-              value={data.weight}
-              onChange={handleFormChange}
-            />
-            {error.weight && (
-              <div className={classes.error}>{error.weight}</div>
-            )}
-          </div>
-        </div>
-        <button
-          type="submit"
-          className={`${modifyMode ? classes.modifyButton : classes.addButton}`}
-        >
-          {modifyMode ? "Modify" : "Add"}
-        </button>
-      </form>
+
+          <button
+            type="submit"
+            className={`${
+              modifyMode ? classes.modifyButton : classes.addButton
+            }`}
+          >
+            {modifyMode ? "Modify" : "Add"}
+          </button>
+        </form>
+      </div>
       <Table
-        modelData={modelData}
+        modelData={filteredModelData}
         setModelData={setModelData}
         setData={setData}
         setModifyMode={setModifyMode}
         setIndex={setIndex}
       />
-    </div>
+    </>
   );
 }
 

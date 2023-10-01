@@ -4,6 +4,10 @@ table {
   border-collapse: collapse;
 }
 
+th {
+  padding: 10px 50px;
+}
+
 .modifyButton,
 .deleteButton {
   padding: 10px;
@@ -12,6 +16,7 @@ table {
   outline: none;
   border: 0;
   color: white;
+  font-size: large;
 }
 
 .modifyButton {
@@ -27,8 +32,8 @@ table {
   background-color: red;
 }
 
-.deleteButton:hover{
-    background-color: rgb(252, 96, 96);
+.deleteButton:hover {
+  background-color: rgb(252, 96, 96);
 }
 
 @media screen and (max-width: 768px) {

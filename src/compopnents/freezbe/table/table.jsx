@@ -24,47 +24,51 @@ function Table({ modelData, setModelData, setData, setModifyMode, setIndex }) {
 
   return (
     <div className={classes.tableContainer}>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Unit Price</th>
-            <th>Range</th>
-            <th>Ingredients</th>
-            <th>Weight</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {modelData?.map((model, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{model.name}</td>
-              <td>{model.description}</td>
-              <td>{model.unitPrice}</td>
-              <td>{model.range}</td>
-              <td>{model.ingredients}</td>
-              <td>{model.weight}</td>
-              <td>
-                <button
-                  className={classes.modifyButton}
-                  onClick={() => modifyHandler(model, index)}
-                >
-                  Modify
-                </button>
-                <button
-                  className={classes.deleteButton}
-                  onClick={() => handleDelete(index)}
-                >
-                  Delete
-                </button>
-              </td>
+      {modelData.length === 0 ? (
+        <div>No data found</div>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Unit Price</th>
+              <th>Range</th>
+              <th>Ingredients</th>
+              <th>Weight</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {modelData?.map((model, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{model.name}</td>
+                <td>{model.description}</td>
+                <td>{model.unitPrice}</td>
+                <td>{model.range}</td>
+                <td>{model.ingredients}</td>
+                <td>{model.weight}</td>
+                <td>
+                  <button
+                    className={classes.modifyButton}
+                    onClick={() => modifyHandler(model, index)}
+                  >
+                    Modify
+                  </button>
+                  <button
+                    className={classes.deleteButton}
+                    onClick={() => handleDelete(index)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
