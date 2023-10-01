@@ -150,17 +150,6 @@ function Procedures() {
           steps: "Each step should be at least 3 characters",
         }));
         emptyFields.push("Steps");
-      } else {
-        const stepsString = data.steps.join(",");
-
-        // Use a regular expression to check if there are any characters other than commas
-        if (/[^,]+/.test(stepsString)) {
-          setError((prevData) => ({
-            ...prevData,
-            steps: "Steps should be separated by commas",
-          }));
-          emptyFields.push("Steps");
-        }
       }
     }
 
@@ -188,17 +177,6 @@ function Procedures() {
             "Each test validation should be at least 3 characters",
         }));
         emptyFields.push("TestValidations");
-      } else {
-        const testValidationsString = data.testValidations.join(",");
-
-        // Use a regular expression to check if there are any characters other than commas
-        if (/[^,]+/.test(testValidationsString)) {
-          setError((prevData) => ({
-            ...prevData,
-            testValidations: "Test validations should be separated by commas",
-          }));
-          emptyFields.push("TestValidations");
-        }
       }
     }
 
