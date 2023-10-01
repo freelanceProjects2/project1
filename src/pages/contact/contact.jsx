@@ -21,6 +21,7 @@ const ContactUs = () => {
           className="bg-img"
           id="iq5bf"
           src="https://img5.goodfon.com/wallpaper/nbig/6/e6/pchioly-ulei-priroda.jpg"
+          alt="bgImg"
         />
         <div className="responsive-container-block container">
           <div className="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12 left-one">
@@ -45,22 +46,25 @@ const ContactUs = () => {
                     alt="WhatsApp"
                   />
                 </a>
-                <a className="share-icon">
+                <a href className="share-icon">
                   <img
                     className="img"
                     src="https://th.bing.com/th/id/R.84669eb4301059aa602096c83a13e15f?rik=FkFOcs3CThcCJQ&pid=ImgRaw&r=0"
+                    alt=""
                   />
                 </a>
-                <a className="share-icon">
+                <a href className="share-icon">
                   <img
                     className="img"
                     src="https://th.bing.com/th/id/R.5e2aed4afbb877d185f8902e09124806?rik=UniOcSct6MQozg&pid=ImgRaw&r=0"
+                    alt=""
                   />
                 </a>
-                <a className="share-icon">
+                <a href className="share-icon">
                   <img
                     className="img"
                     src="https://th.bing.com/th/id/R.24223c92569a035c382c2b658e9789a0?rik=SsJgrmXtdiNaEw&pid=ImgRaw&r=0"
+                    alt=""
                   />
                 </a>
               </div>

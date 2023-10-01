@@ -18,7 +18,7 @@
   flex-direction: column;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
-  height: 100vh; /* Use viewport height to make it full-screen */
+  height: 94.5vh; /* Use viewport height to make it full-screen */
 }
 
 .left-container {
@@ -40,14 +40,14 @@
 .title-bee h1 {
   font-weight: bold;
   font-size: 48px;
-  color: #333; /* Dark text color */
+  color: #d3cfcf; /* Dark text color */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Add a subtle text shadow */
   margin: 0; /* Remove default margins */
 }
 
 .title-bee p {
   font-size: 25px;
-  color: #666; /* Slightly lighter text color */
+  color: #aca9a9; /* Slightly lighter text color */
   text-align: center;
   margin: 10px 0; /* Add vertical margin */
 }

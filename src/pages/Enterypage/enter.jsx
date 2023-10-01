@@ -12,7 +12,7 @@ export default function Enter() {
             style={{ fontWeight: "normal", fontSize: "64px" }}
           >
             KillerBee
-          </h1>{" "}
+          </h1>
           <p>"Safeguarding Excellence, Digitizing Precision"</p>
         </div>
       </div>

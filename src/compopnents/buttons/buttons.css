@@ -1,27 +1,27 @@
-
-.buttons-head{
-    display: flex;
-    flex-direction: row;
+.buttons-head {
+  display: flex;
+  flex-direction: row;
 }
 .buttons-head {
   display: flex;
   align-items: center;
   justify-content: space-around;
-    font-family: sans-serif;
+  font-family: sans-serif;
+  height: 50px;
 }
 button {
-    border: none;
-    padding: 4px 10px;
-    font-size: 11px;
-    position: relative;
-    background: transparent;
-    color: #ffff00;
-    text-transform: uppercase;
-    border: 3px solid #ffff00;
-    cursor: pointer;
-    transition: all 0.7s;
-    overflow: hidden;
-    border-radius: 100px;
+  border: none;
+  padding: 4px 10px;
+  font-size: 11px;
+  position: relative;
+  background: transparent;
+  color: #ffff00;
+  text-transform: uppercase;
+  border: 3px solid #ffff00;
+  cursor: pointer;
+  transition: all 0.7s;
+  overflow: hidden;
+  border-radius: 100px;
 }
 
 button:hover {
