@@ -232,7 +232,7 @@ function Freezbe() {
               <input
                 type="text"
                 name="name"
-                placeholder="Name"
+                placeholder="Enter a name"
                 value={data.name}
                 onChange={handleFormChange}
               />
@@ -242,7 +242,7 @@ function Freezbe() {
               <input
                 type="text"
                 name="description"
-                placeholder="Description"
+                placeholder="Enter a description"
                 value={data.description}
                 onChange={handleFormChange}
               />
@@ -258,7 +258,7 @@ function Freezbe() {
               <input
                 type="number"
                 name="unitPrice"
-                placeholder="Unit Price"
+                placeholder="Enter a unit price"
                 value={data.unitPrice}
                 onChange={handleFormChange}
               />
@@ -270,7 +270,7 @@ function Freezbe() {
               <input
                 type="number"
                 name="range"
-                placeholder="Range"
+                placeholder="Enter a range"
                 value={data.range}
                 onChange={handleFormChange}
               />
@@ -286,7 +286,7 @@ function Freezbe() {
               <input
                 type="text"
                 name="ingredients"
-                placeholder="Ingredients (comma separated)"
+                placeholder="Enter ingredients"
                 value={data.ingredients}
                 onChange={handleFormChange}
               />
@@ -298,7 +298,7 @@ function Freezbe() {
               <input
                 type="number"
                 name="weight"
-                placeholder="Weight"
+                placeholder="Enter a weight"
                 value={data.weight}
                 onChange={handleFormChange}
               />

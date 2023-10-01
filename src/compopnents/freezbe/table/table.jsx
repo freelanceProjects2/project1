@@ -25,7 +25,7 @@ function Table({ modelData, setModelData, setData, setModifyMode, setIndex }) {
   return (
     <div className={classes.tableContainer}>
       {modelData.length === 0 ? (
-        <div>No data found</div>
+        <div className={classes.noData}>No data found</div>
       ) : (
         <table>
           <thead>
