@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import classes from "./home.module.css";
 import Freezbe from "../../compopnents/freezbe/freezbe";
-import Compte from "../../compopnents/compte/compte";
 import Ingredients from "../../compopnents/ingreedients/ingredients";
 import Procedures from "../../compopnents/procedures/procedures";
 
@@ -29,14 +28,6 @@ function Home() {
           </div>
           <div
             className={`${classes.msCard} ${
-              activeComponent === "Compte" ? classes.active : ""
-            }`}
-            onClick={() => setActive("Compte")}
-          >
-            MS - Compte
-          </div>
-          <div
-            className={`${classes.msCard} ${
               activeComponent === "Ingredients" ? classes.active : ""
             }`}
             onClick={() => setActive("Ingredients")}
@@ -53,7 +44,6 @@ function Home() {
           </div>
         </div>
         {activeComponent === "Freezbe" && <Freezbe />}
-        {activeComponent === "Compte" && <Compte />}
         {activeComponent === "Ingredients" && <Ingredients />}
         {activeComponent === "Procedures" && <Procedures />}
       </div>

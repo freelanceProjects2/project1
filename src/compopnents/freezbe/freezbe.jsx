@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import classes from "./freezbe.module.css";
-import Table from "./table/table";
+import classes from "../Css/models.module.css";
+import Table from "../table/table";
 
 function Freezbe() {
   const [modelData, setModelData] = useState(() => {
-    const savedModelDataJSON = localStorage.getItem("modelData");
-    console.log("savedModelDataJSON", JSON.parse(savedModelDataJSON));
+    const savedModelDataJSON = localStorage.getItem("modelDataFreezbe");
     return savedModelDataJSON ? JSON.parse(savedModelDataJSON) : [];
   });
 
@@ -41,10 +40,9 @@ function Freezbe() {
   }, [modelData, searchText]);
 
   useEffect(() => {
-    console.log("useEffect triggered");
     try {
       const modelDataJSON = JSON.stringify(modelData);
-      localStorage.setItem("modelData", modelDataJSON);
+      localStorage.setItem("modelDataFreezbe", modelDataJSON);
     } catch (error) {
       console.error("Error saving data to localStorage:", error);
     }
@@ -328,11 +326,43 @@ function Freezbe() {
         </form>
       </div>
       <Table
-        modelData={filteredModelData}
-        setModelData={setModelData}
-        setData={setData}
-        setModifyMode={setModifyMode}
-        setIndex={setIndex}
+        data={filteredModelData}
+        columns={[
+          { label: "Name", field: "name" },
+          { label: "Description", field: "description" },
+          { label: "Unit Price", field: "unitPrice" },
+          { label: "Range", field: "range" },
+          { label: "Ingredients", field: "ingredients" },
+          { label: "Weight", field: "weight" },
+        ]}
+        onModify={(model, index) => {
+          setModifyMode(true);
+          setData({
+            name: model.name,
+            description: model.description,
+            unitPrice: model.unitPrice,
+            range: model.range,
+            ingredients: model.ingredients,
+            weight: model.weight,
+          });
+          setIndex(index);
+        }}
+        onDelete={(index) => {
+          setModelData((prevData) => {
+            const updateModel = [...prevData];
+            updateModel.splice(index, 1);
+            return updateModel;
+          });
+          setModifyMode(false);
+          setData({
+            name: "",
+            description: "",
+            unitPrice: "",
+            range: "",
+            ingredients: "",
+            weight: "",
+          });
+        }}
       />
     </>
   );
