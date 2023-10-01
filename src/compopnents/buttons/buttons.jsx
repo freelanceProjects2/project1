@@ -4,21 +4,21 @@ import { Link } from "react-router-dom";
 function Buttons() {
   return (
     <div className="buttons-head">
-      <button>
-        <Link to="/Home">Home </Link>
+      <Link to="/"> <button>
+       Home
 
         <span class="first"></span>
         <span class="second"></span>
         <span class="third"></span>
         <span class="fourth"></span>
-      </button>
-      <button>
+      </button> </Link>
+      <Link to="/contact-us"> <button>
         Contact
         <span class="first"></span>
         <span class="second"></span>
         <span class="third"></span>
         <span class="fourth"></span>
-      </button>
+      </button></Link>
     </div>
   );
 }
