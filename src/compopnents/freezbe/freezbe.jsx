@@ -226,7 +226,8 @@ function Freezbe() {
         {/* First pair of inputs */}
         <form onSubmit={handleSubmit}>
           <div className={classes.inputContainer}>
-            <div>
+            <div className={classes.labels}>
+              <label>Name</label>
               <input
                 type="text"
                 name="name"
@@ -236,7 +237,8 @@ function Freezbe() {
               />
               {error.name && <div className={classes.error}>{error.name}</div>}
             </div>
-            <div>
+            <div className={classes.labels}>
+              <label>Description</label>
               <input
                 type="text"
                 name="description"
@@ -252,7 +254,8 @@ function Freezbe() {
 
           {/* Second pair of inputs */}
           <div className={classes.inputContainer}>
-            <div>
+            <div className={classes.labels}>
+              <label>Unit Price</label>
               <input
                 type="number"
                 name="unitPrice"
@@ -264,7 +267,8 @@ function Freezbe() {
                 <div className={classes.error}>{error.unitPrice}</div>
               )}
             </div>
-            <div>
+            <div className={classes.labels}>
+              <label>Range</label>
               <input
                 type="number"
                 name="range"
@@ -280,7 +284,8 @@ function Freezbe() {
 
           {/* Third pair of inputs */}
           <div className={classes.inputContainer}>
-            <div>
+            <div className={classes.labels}>
+              <label>Ingredients</label>
               <input
                 type="text"
                 name="ingredients"
@@ -292,7 +297,8 @@ function Freezbe() {
                 <div className={classes.error}>{error.ingredients}</div>
               )}
             </div>
-            <div>
+            <div className={classes.labels}>
+            <label>Weight</label>
               <input
                 type="number"
                 name="weight"

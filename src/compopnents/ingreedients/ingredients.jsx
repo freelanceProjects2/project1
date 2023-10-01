@@ -140,7 +140,8 @@ function Ingredients() {
         {/* First pair of inputs */}
         <form onSubmit={handleSubmit}>
           <div className={classes.inputContainer}>
-            <div>
+            <div className={classes.labels}>
+              <label>Name</label>
               <input
                 type="text"
                 name="name"
@@ -150,7 +151,8 @@ function Ingredients() {
               />
               {error.name && <div className={classes.error}>{error.name}</div>}
             </div>
-            <div>
+            <div className={classes.labels}>
+              <label>Description</label>
               <input
                 type="text"
                 name="description"

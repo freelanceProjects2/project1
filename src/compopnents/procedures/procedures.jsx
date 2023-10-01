@@ -262,7 +262,8 @@ function Procedures() {
         {/* First pair of inputs */}
         <form onSubmit={handleSubmit}>
           <div className={classes.inputContainer}>
-            <div>
+            <div className={classes.labels}>
+              <label>Name</label>
               <input
                 type="text"
                 name="name"
@@ -272,7 +273,8 @@ function Procedures() {
               />
               {error.name && <div className={classes.error}>{error.name}</div>}
             </div>
-            <div>
+            <div className={classes.labels}>
+              <label>Description</label>
               <input
                 type="text"
                 name="description"
@@ -288,7 +290,8 @@ function Procedures() {
 
           {/* Second pair of inputs */}
           <div className={classes.inputContainer}>
-            <div>
+            <div className={classes.labels}>
+              <label>Freezbe Model</label>
               <input
                 type="text"
                 placeholder="Enter freezbe model"
@@ -300,7 +303,8 @@ function Procedures() {
                 <div className={classes.error}>{error.freezbeModel}</div>
               )}
             </div>
-            <div>
+            <div className={classes.labels}>
+              <label>Steps</label>
               <input
                 type="text"
                 name="steps"
@@ -315,8 +319,9 @@ function Procedures() {
           </div>
 
           <div
-            className={`${classes.testValidations} ${classes.inputContainer}`}
+            className={`${classes.testValidations} ${classes.inputContainer} ${classes.labels}`}
           >
+            <label>Test Validations</label>
             <input
               type="text"
               name="testValidations"
