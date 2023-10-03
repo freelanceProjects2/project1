@@ -7,7 +7,7 @@ function Ingredients() {
     const savedModelDataJSON = localStorage.getItem("modelDataIngredients");
     return savedModelDataJSON ? JSON.parse(savedModelDataJSON) : [];
   });
-
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [data, setData] = useState({
     name: "",
     description: "",
@@ -136,56 +136,61 @@ function Ingredients() {
 
   return (
     <>
-      <div>
-        {/* First pair of inputs */}
-        <form onSubmit={handleSubmit}>
-          <div className={classes.inputContainer}>
-            <div className={classes.labels}>
-              <label>Name</label>
-              <input
-                type="text"
-                name="name"
-                placeholder="Enter a name"
-                value={data.name}
-                onChange={handleFormChange}
-              />
-              {error.name && <div className={classes.error}>{error.name}</div>}
-            </div>
-            <div className={classes.labels}>
-              <label>Description</label>
-              <input
-                type="text"
-                name="description"
-                placeholder="Enter a description"
-                value={data.description}
-                onChange={handleFormChange}
-              />
-              {error.description && (
-                <div className={classes.error}>{error.description}</div>
-              )}
-            </div>
-          </div>
+      {userInfo.role === "superadmin" ||
+        (userInfo.role === "admin" && (
+          <div>
+            {/* First pair of inputs */}
+            <form onSubmit={handleSubmit}>
+              <div className={classes.inputContainer}>
+                <div className={classes.labels}>
+                  <label>Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Enter a name"
+                    value={data.name}
+                    onChange={handleFormChange}
+                  />
+                  {error.name && (
+                    <div className={classes.error}>{error.name}</div>
+                  )}
+                </div>
+                <div className={classes.labels}>
+                  <label>Description</label>
+                  <input
+                    type="text"
+                    name="description"
+                    placeholder="Enter a description"
+                    value={data.description}
+                    onChange={handleFormChange}
+                  />
+                  {error.description && (
+                    <div className={classes.error}>{error.description}</div>
+                  )}
+                </div>
+              </div>
 
-          <div className={`${classes.searchBar} ${classes.inputContainer}`}>
-            <input
-              type="text"
-              name="search"
-              placeholder="Search by name"
-              value={searchText}
-              onChange={handleSearch}
-            />
-          </div>
+              <div className={`${classes.searchBar} ${classes.inputContainer}`}>
+                <input
+                  type="text"
+                  name="search"
+                  placeholder="Search by name"
+                  value={searchText}
+                  onChange={handleSearch}
+                />
+              </div>
 
-          <button
-            type="submit"
-            className={`${
-              modifyMode ? classes.modifyButton : classes.addButton
-            }`}
-          >
-            {modifyMode ? "Modify" : "Add"}
-          </button>
-        </form>
-      </div>
+              <button
+                type="submit"
+                className={`${
+                  modifyMode ? classes.modifyButton : classes.addButton
+                }`}
+              >
+                {modifyMode ? "Modify" : "Add"}
+              </button>
+            </form>
+          </div>
+        ))}
       <Table
         data={filteredModelData}
         columns={[

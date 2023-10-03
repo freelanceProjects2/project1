@@ -1,68 +1,65 @@
 /* Import Google font - Poppins */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
-*{
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
- 
-  
-.container-log{
+.container-log {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   max-width: 430px;
   width: 100%;
   background: #fff;
   border-radius: 7px;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
 }
-.container-log .registration-log{
+.container-log .registration-log {
   display: none;
 }
-#check:checked ~ .registration-log{
+#check:checked ~ .registration-log {
   display: block;
 }
-#check:checked ~ .login{
+#check:checked ~ .login {
   display: none;
 }
-#check{
+#check {
   display: none;
 }
-.container-log .form-log{
+.container-log .form-log {
   padding: 2rem;
 }
-.form-log header{
+.form-log header {
   font-size: 2rem;
   font-weight: 500;
   text-align: center;
   margin-bottom: 1.5rem;
 }
- .form-log input{
-   height: 60px;
-   width: 100%;
-   padding: 0 15px;
-   font-size: 17px;
-   margin-bottom: 1.3rem;
-   border: 1px solid #ddd;
-   border-radius: 6px;
-   outline: none;
- }
- .form-log input:focus{
-   box-shadow: 0 1px 0 rgba(0,0,0,0.2);
- }
-.form-log a{
+.form-log input {
+  height: 60px;
+  width: 100%;
+  padding: 0 15px;
+  font-size: 17px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+}
+.form-log input:focus {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+.form-log a {
   font-size: 16px;
   color: #9b9b25;
   text-decoration: none;
 }
-.form-log a:hover{
+.form-log a:hover {
   text-decoration: underline;
 }
-.form-log input.button{
+.form-log input.button {
   color: #edff23;
   background: #000000;
   font-size: 1.2rem;
@@ -72,18 +69,26 @@
   cursor: pointer;
   transition: 0.4s;
 }
-.form-log input.button:hover{
+.form-log input.button:hover {
   background: #edff23;
-  color:#000000;
+  color: #000000;
 }
-.signup-log{
+.signup-log {
   font-size: 17px;
   text-align: center;
 }
-.signup-log label{
+.signup-log label {
   color: #9b9b25;
   cursor: pointer;
 }
-.signup-log label:hover{
+.signup-log label:hover {
   text-decoration: underline;
+}
+
+.error {
+  color: red;
+}
+
+.loginLabel {
+  margin-bottom: 1.3rem;
 }
