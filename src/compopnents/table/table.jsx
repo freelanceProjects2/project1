@@ -5,6 +5,7 @@ import classes from "./table.module.css";
 function Table({ data, columns, onModify, onDelete }) {
   // Custom rendering function for the unitPrice column
   const renderUnitPrice = (value) => `$${value}`;
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   // Custom rendering function for the weight column
   const renderWeight = (value) => `${value} kg`;
@@ -23,11 +24,11 @@ function Table({ data, columns, onModify, onDelete }) {
           <thead>
             <tr>
               <th>ID</th>
-
               {columns.map((column, index) => (
                 <th key={index}>{column.label}</th>
               ))}
-              <th>Actions</th>
+              {userInfo.role === "superadmin" ||
+                (userInfo.role === "admin" && <th>Actions</th>)}
             </tr>
           </thead>
           <tbody>
@@ -57,20 +58,23 @@ function Table({ data, columns, onModify, onDelete }) {
                     )}
                   </td>
                 ))}
-                <td>
-                  <button
-                    className={classes.modifyButton}
-                    onClick={() => onModify(item, index)}
-                  >
-                    Modify
-                  </button>
-                  <button
-                    className={classes.deleteButton}
-                    onClick={() => onDelete(index)}
-                  >
-                    Delete
-                  </button>
-                </td>
+                {userInfo.role === "superadmin" ||
+                  (userInfo.role === "admin" && (
+                    <td>
+                      <button
+                        className={classes.modifyButton}
+                        onClick={() => onModify(item, index)}
+                      >
+                        Modify
+                      </button>
+                      <button
+                        className={classes.deleteButton}
+                        onClick={() => onDelete(index)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  ))}
               </tr>
             ))}
           </tbody>

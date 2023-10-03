@@ -169,10 +169,12 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      await axios.post("http://localhost:8000/user/login", {
+      const resp = await axios.post("http://localhost:8000/user/login", {
         email: data?.email,
         password: data?.password,
       });
+
+      localStorage.setItem("userInfo", JSON.stringify(resp.data));
       navigate("/home");
     } catch (error) {
       console.log("Login error", error);

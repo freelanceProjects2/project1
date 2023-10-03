@@ -7,8 +7,8 @@ import User from "../../compopnents/user/user";
 
 function Home() {
   // State to track the active component
-  const [activeComponent, setActiveComponent] = useState("Freezbe");
-
+  const [activeComponent, setActiveComponent] = useState("Ingredients");
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   // Function to set the active component
   const setActive = (component) => {
     setActiveComponent(component);
@@ -19,7 +19,6 @@ function Home() {
       <div className={classes.landingPage}>
         <h1>Model table management</h1>
         <div className={classes.titles}>
-         
           <div
             className={`${classes.msCard} ${
               activeComponent === "Ingredients" ? classes.active : ""
@@ -44,20 +43,23 @@ function Home() {
           >
             MS - Freezbe
           </div>
-          <div
-            className={`${classes.msCard} ${
-              activeComponent === "User" ? classes.active : ""
-            }`}
-            onClick={() => setActive("User")}
-          >
-            MS - Users
-          </div>
+          {userInfo?.role === "superadmin" && (
+            <div
+              className={`${classes.msCard} ${
+                activeComponent === "User" ? classes.active : ""
+              }`}
+              onClick={() => setActive("User")}
+            >
+              MS - Users
+            </div>
+          )}
         </div>
         {activeComponent === "Freezbe" && <Freezbe />}
         {activeComponent === "Ingredients" && <Ingredients />}
         {activeComponent === "Procedures" && <Procedures />}
-        {activeComponent === "User" && <User />}
-
+        {userInfo?.role === "superadmin" && activeComponent === "User" && (
+          <User />
+        )}
       </div>
     </>
   );

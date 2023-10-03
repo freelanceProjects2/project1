@@ -7,7 +7,7 @@ function Procedures() {
     const savedModelDataJSON = localStorage.getItem("modelDataProcedures");
     return savedModelDataJSON ? JSON.parse(savedModelDataJSON) : [];
   });
-
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [data, setData] = useState({
     name: "",
     description: "",
@@ -236,102 +236,107 @@ function Procedures() {
 
   return (
     <>
-      <div>
-        {/* First pair of inputs */}
-        <form onSubmit={handleSubmit}>
-          <div className={classes.inputContainer}>
-            <div className={classes.labels}>
-              <label>Name</label>
-              <input
-                type="text"
-                name="name"
-                placeholder="Enter a name"
-                value={data.name}
-                onChange={handleFormChange}
-              />
-              {error.name && <div className={classes.error}>{error.name}</div>}
-            </div>
-            <div className={classes.labels}>
-              <label>Description</label>
-              <input
-                type="text"
-                name="description"
-                placeholder="Enter a description"
-                value={data.description}
-                onChange={handleFormChange}
-              />
-              {error.description && (
-                <div className={classes.error}>{error.description}</div>
-              )}
-            </div>
-          </div>
+      {userInfo.role === "superadmin" ||
+        (userInfo.role === "admin" && (
+          <div>
+            {/* First pair of inputs */}
+            <form onSubmit={handleSubmit}>
+              <div className={classes.inputContainer}>
+                <div className={classes.labels}>
+                  <label>Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Enter a name"
+                    value={data.name}
+                    onChange={handleFormChange}
+                  />
+                  {error.name && (
+                    <div className={classes.error}>{error.name}</div>
+                  )}
+                </div>
+                <div className={classes.labels}>
+                  <label>Description</label>
+                  <input
+                    type="text"
+                    name="description"
+                    placeholder="Enter a description"
+                    value={data.description}
+                    onChange={handleFormChange}
+                  />
+                  {error.description && (
+                    <div className={classes.error}>{error.description}</div>
+                  )}
+                </div>
+              </div>
 
-          {/* Second pair of inputs */}
-          <div className={classes.inputContainer}>
-            <div className={classes.labels}>
-              <label>Freezbe Model</label>
-              <input
-                type="text"
-                placeholder="Enter freezbe model"
-                name="freezbeModel"
-                value={data.freezbeModel}
-                onChange={handleFormChange}
-              />
-              {error.freezbeModel && (
-                <div className={classes.error}>{error.freezbeModel}</div>
-              )}
-            </div>
-            <div className={classes.labels}>
-              <label>Steps</label>
-              <input
-                type="text"
-                name="steps"
-                placeholder="Enter steps(separated by commas)"
-                value={data.steps}
-                onChange={handleFormChange}
-              />
-              {error.steps && (
-                <div className={classes.error}>{error.steps}</div>
-              )}
-            </div>
-          </div>
+              {/* Second pair of inputs */}
+              <div className={classes.inputContainer}>
+                <div className={classes.labels}>
+                  <label>Freezbe Model</label>
+                  <input
+                    type="text"
+                    placeholder="Enter freezbe model"
+                    name="freezbeModel"
+                    value={data.freezbeModel}
+                    onChange={handleFormChange}
+                  />
+                  {error.freezbeModel && (
+                    <div className={classes.error}>{error.freezbeModel}</div>
+                  )}
+                </div>
+                <div className={classes.labels}>
+                  <label>Steps</label>
+                  <input
+                    type="text"
+                    name="steps"
+                    placeholder="Enter steps(separated by commas)"
+                    value={data.steps}
+                    onChange={handleFormChange}
+                  />
+                  {error.steps && (
+                    <div className={classes.error}>{error.steps}</div>
+                  )}
+                </div>
+              </div>
 
-          <div
-            className={`${classes.testValidations} ${classes.inputContainer} ${classes.labels}`}
-          >
-            <label>Test Validations</label>
-            <input
-              type="text"
-              name="testValidations"
-              placeholder="Enter test validations(separated by commas)"
-              value={data.testValidations}
-              onChange={handleFormChange}
-            />
-            {error.testValidations && (
-              <div className={classes.error}>{error.testValidations}</div>
-            )}
-          </div>
+              <div
+                className={`${classes.testValidations} ${classes.inputContainer} ${classes.labels}`}
+              >
+                <label>Test Validations</label>
+                <input
+                  type="text"
+                  name="testValidations"
+                  placeholder="Enter test validations(separated by commas)"
+                  value={data.testValidations}
+                  onChange={handleFormChange}
+                />
+                {error.testValidations && (
+                  <div className={classes.error}>{error.testValidations}</div>
+                )}
+              </div>
 
-          <div className={`${classes.searchBar} ${classes.inputContainer}`}>
-            <input
-              type="text"
-              name="search"
-              placeholder="Search by name"
-              value={searchText}
-              onChange={handleSearch}
-            />
-          </div>
+              <div className={`${classes.searchBar} ${classes.inputContainer}`}>
+                <input
+                  type="text"
+                  name="search"
+                  placeholder="Search by name"
+                  value={searchText}
+                  onChange={handleSearch}
+                />
+              </div>
 
-          <button
-            type="submit"
-            className={`${
-              modifyMode ? classes.modifyButton : classes.addButton
-            }`}
-          >
-            {modifyMode ? "Modify" : "Add"}
-          </button>
-        </form>
-      </div>
+              <button
+                type="submit"
+                className={`${
+                  modifyMode ? classes.modifyButton : classes.addButton
+                }`}
+              >
+                {modifyMode ? "Modify" : "Add"}
+              </button>
+            </form>
+          </div>
+        ))}
       <Table
         data={filteredModelData}
         columns={[
