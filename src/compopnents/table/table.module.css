@@ -12,10 +12,15 @@ table {
   font-size: 25px;
   border-collapse: collapse;
   overflow: auto;
+  margin-bottom: 50px;
 }
 
 th {
   padding: 10px 50px;
+}
+
+td {
+  padding: 10px;
 }
 
 .modifyButton,
@@ -31,7 +36,7 @@ th {
 
 .modifyButton {
   background-color: #1f65ff;
-  margin-right: 5px;
+  margin-right: 15px;
 }
 
 .modifyButton:hover {

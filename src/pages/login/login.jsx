@@ -73,12 +73,6 @@ function Login() {
         first_name: "First name should be at least 3 characters",
       }));
       emptyFields.push("first_name");
-    } else if (typeof data.first_name === "number") {
-      setError((prevData) => ({
-        ...prevData,
-        first_name: "First name should be a string",
-      }));
-      emptyFields.push("first_name");
     }
 
     if (data.last_name.length === 0) {
@@ -93,24 +87,12 @@ function Login() {
         last_name: "Last name should be at least 3 characters",
       }));
       emptyFields.push("last_name");
-    } else if (typeof data.last_name === "number") {
-      setError((prevData) => ({
-        ...prevData,
-        last_name: "Last name should be a string",
-      }));
-      emptyFields.push("last_name");
     }
 
     if (data.email.length === 0) {
       setError((prevData) => ({
         ...prevData,
         email: "Please enter an email",
-      }));
-      emptyFields.push("email");
-    } else if (typeof data.email === "number") {
-      setError((prevData) => ({
-        ...prevData,
-        email: "Email should be a string",
       }));
       emptyFields.push("email");
     } else if (data.email) {
