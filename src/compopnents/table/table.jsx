@@ -39,7 +39,7 @@ function Table({ data, columns, onModify, onDelete, isLoading }) {
                 <td>{index + 1}</td>
                 {columns.map((column, columnIndex) => (
                   <td key={columnIndex}>
-                    {column?.field === "testValidations" ? ( // Check if the field is "testValidations"
+                    {column?.field === "TestValidations" ? ( // Check if the field is "testValidations"
                       <ul>
                         {item[column?.field].map(
                           (validation, validationIndex) => (
@@ -47,7 +47,7 @@ function Table({ data, columns, onModify, onDelete, isLoading }) {
                           )
                         )}
                       </ul>
-                    ) : column?.field === "steps" ? ( // Check if the field is "steps"
+                    ) : column?.field === "Steps" ? ( // Check if the field is "steps"
                       <ul>
                         {item[column?.field].map((step, stepIndex) => (
                           <li key={stepIndex}>{step}</li>

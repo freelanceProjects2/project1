@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import classes from "../Css/models.module.css";
 import Table from "../table/table";
+import useFetch from "../../useFetch";
+import axios from "axios";
 
 function Procedures() {
-  const [modelData, setModelData] = useState(() => {
-    const savedModelDataJSON = localStorage.getItem("modelDataProcedures");
-    return savedModelDataJSON ? JSON.parse(savedModelDataJSON) : [];
-  });
+  const { modelData, isLoading, reFetch } = useFetch("procedure");
+
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [data, setData] = useState({
     name: "",
@@ -24,7 +24,7 @@ function Procedures() {
     steps: "",
   });
   const [modifyMode, setModifyMode] = useState(false);
-  const [index, setIndex] = useState();
+  const [id, setId] = useState();
 
   const [filteredModelData, setFilteredModelData] = useState([]);
 
@@ -36,15 +36,6 @@ function Procedures() {
     );
     setFilteredModelData(newData);
   }, [modelData, searchText]);
-
-  useEffect(() => {
-    try {
-      const modelDataJSON = JSON.stringify(modelData);
-      localStorage.setItem("modelDataProcedures", modelDataJSON);
-    } catch (error) {
-      console.error("Error saving data to localStorage:", error);
-    }
-  }, [modelData]);
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -63,7 +54,7 @@ function Procedures() {
     setError((prevState) => ({ ...prevState, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const emptyFields = [];
@@ -185,17 +176,14 @@ function Procedures() {
     }
 
     if (!modifyMode) {
-      setModelData([
-        ...modelData,
-        {
-          name: data.name,
-          description: data.description,
-          freezbeModel: data.freezbeModel,
-          testValidations: data.testValidations,
-          steps: data.steps,
-        },
-      ]);
-
+      await axios.post("http://localhost:8000/procedure", {
+        name: data?.name,
+        Description: data?.description,
+        FreezbeModel: data?.freezbeModel,
+        Steps: data?.steps,
+        TestValidations: data?.testValidations,
+      });
+      reFetch();
       setData({
         name: "",
         description: "",
@@ -207,17 +195,14 @@ function Procedures() {
       return;
     }
 
-    // Update an existing item
-    const updatedModelData = [...modelData];
-    updatedModelData[index] = {
-      name: data.name,
-      description: data.description,
-      freezbeModel: data.freezbeModel,
-      testValidations: data.testValidations,
-      steps: data.steps,
-    };
-
-    setModelData(updatedModelData);
+    await axios.put(`http://localhost:8000/procedure/${id}`, {
+      name: data?.name,
+      Description: data?.description,
+      FreezbeModel: data?.freezbeModel,
+      Steps: data?.steps,
+      TestValidations: data?.testValidations,
+    });
+    reFetch();
 
     setModifyMode(false);
 
@@ -338,30 +323,28 @@ function Procedures() {
       )}
       <Table
         data={filteredModelData}
+        isLoading={isLoading}
         columns={[
           { label: "Name", field: "name" },
-          { label: "Description", field: "description" },
-          { label: "Unit Price", field: "freezbeModel" },
-          { label: "Steps", field: "steps" },
-          { label: "Test Validations", field: "testValidations" },
+          { label: "Description", field: "Description" },
+          { label: "Freezbe Model", field: "FreezbeModel" },
+          { label: "Steps", field: "Steps" },
+          { label: "Test Validations", field: "TestValidations" },
         ]}
-        onModify={(model, index) => {
+        onModify={(model) => {
           setModifyMode(true);
           setData({
             name: model.name,
             description: model.description,
-            freezbeModel: model.freezbeModel,
-            testValidations: model.testValidations,
-            steps: model.steps,
+            freezbeModel: model.FreezbeModel,
+            testValidations: model.TestValidations,
+            steps: model.Steps,
           });
-          setIndex(index);
+          setId(model._id);
         }}
-        onDelete={(index) => {
-          setModelData((prevData) => {
-            const updateModel = [...prevData];
-            updateModel.splice(index, 1);
-            return updateModel;
-          });
+        onDelete={async (model) => {
+          await axios.delete(`http://localhost:8000/procedure/${model._id}`);
+          reFetch();
           setModifyMode(false);
           setData({
             name: "",
