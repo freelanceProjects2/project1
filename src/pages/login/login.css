@@ -9,7 +9,7 @@
 
  
   
-.container{
+.container-log{
   position: absolute;
   top: 50%;
   left: 50%;
@@ -20,10 +20,10 @@
   border-radius: 7px;
   box-shadow: 0 5px 10px rgba(0,0,0,0.3);
 }
-.container .registration{
+.container-log .registration-log{
   display: none;
 }
-#check:checked ~ .registration{
+#check:checked ~ .registration-log{
   display: block;
 }
 #check:checked ~ .login{
@@ -32,16 +32,16 @@
 #check{
   display: none;
 }
-.container .form{
+.container-log .form-log{
   padding: 2rem;
 }
-.form header{
+.form-log header{
   font-size: 2rem;
   font-weight: 500;
   text-align: center;
   margin-bottom: 1.5rem;
 }
- .form input{
+ .form-log input{
    height: 60px;
    width: 100%;
    padding: 0 15px;
@@ -51,18 +51,18 @@
    border-radius: 6px;
    outline: none;
  }
- .form input:focus{
+ .form-log input:focus{
    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
  }
-.form a{
+.form-log a{
   font-size: 16px;
   color: #9b9b25;
   text-decoration: none;
 }
-.form a:hover{
+.form-log a:hover{
   text-decoration: underline;
 }
-.form input.button{
+.form-log input.button{
   color: #edff23;
   background: #000000;
   font-size: 1.2rem;
@@ -72,18 +72,18 @@
   cursor: pointer;
   transition: 0.4s;
 }
-.form input.button:hover{
+.form-log input.button:hover{
   background: #edff23;
   color:#000000;
 }
-.signup{
+.signup-log{
   font-size: 17px;
   text-align: center;
 }
-.signup label{
+.signup-log label{
   color: #9b9b25;
   cursor: pointer;
 }
-.signup label:hover{
+.signup-log label:hover{
   text-decoration: underline;
 }

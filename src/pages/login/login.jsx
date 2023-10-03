@@ -23,9 +23,9 @@ function Login() {
       return (
         <div style={backgroundImageStyle}>
           <div style={overlayStyle}></div> {/* Overlay */}
-      <div className="container">
+      <div className="container-log">
         <input type="checkbox" id="check" />
-        <div className="login form">
+        <div className="login-log form-log">
           <header>Login</header>
           <form action="#">
             <input type="text" placeholder="Enter your email" />
@@ -33,14 +33,14 @@ function Login() {
             <a href="#">Forgot password?</a>
             <input type="button" className="button" value="Login" />
           </form>
-          <div className="signup">
-            <span className="signup">
+          <div className="signup-log">
+            <span className="signup-log">
               Don't have an account?
               <label htmlFor="check">Signup</label>
             </span>
           </div>
         </div>
-        <div className="registration form">
+        <div className="registration-log form-log">
           <header>Signup</header>
           <form action="#">
             <input type="text" placeholder="Enter your email" />
@@ -48,8 +48,8 @@ function Login() {
             <input type="password" placeholder="Confirm your password" />
             <input type="button" className="button" value="Signup" />
           </form>
-          <div className="signup">
-            <span className="signup">
+          <div className="signup-log">
+            <span className="signup-log">
               Already have an account?
               <label htmlFor="check">Login</label>
             </span>
