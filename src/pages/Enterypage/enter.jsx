@@ -18,7 +18,7 @@ export default function Enter() {
       </div>
 
       <div className="right-container">
-        <Link to="/Home" className="custom-button">
+        <Link to="/login" className="custom-button">
           Enter{" "}
         </Link>
       </div>
