@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import classes from "../Css/models.module.css";
 import Table from "../table/table";
+import useFetch from "../../useFetch";
+import axios from "axios";
 
 function Ingredients() {
-  const [modelData, setModelData] = useState(() => {
-    const savedModelDataJSON = localStorage.getItem("modelDataIngredients");
-    return savedModelDataJSON ? JSON.parse(savedModelDataJSON) : [];
-  });
+  const { modelData, isLoading, reFetch } = useFetch("ingredient");
+
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [data, setData] = useState({
     name: "",
@@ -18,7 +18,7 @@ function Ingredients() {
     description: "",
   });
   const [modifyMode, setModifyMode] = useState(false);
-  const [index, setIndex] = useState();
+  const [id, setId] = useState();
 
   const [filteredModelData, setFilteredModelData] = useState([]);
 
@@ -31,15 +31,6 @@ function Ingredients() {
     setFilteredModelData(newData);
   }, [modelData, searchText]);
 
-  useEffect(() => {
-    try {
-      const modelDataJSON = JSON.stringify(modelData);
-      localStorage.setItem("modelDataIngredients", modelDataJSON);
-    } catch (error) {
-      console.error("Error saving data to localStorage:", error);
-    }
-  }, [modelData]);
-
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setData((prevState) => ({ ...prevState, [name]: value }));
@@ -47,7 +38,7 @@ function Ingredients() {
     setError((prevState) => ({ ...prevState, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const emptyFields = [];
@@ -97,14 +88,11 @@ function Ingredients() {
     }
 
     if (!modifyMode) {
-      setModelData([
-        ...modelData,
-        {
-          name: data.name,
-          description: data.description,
-        },
-      ]);
-
+      await axios.post("http://localhost:8000/ingredient", {
+        name: data?.name,
+        Description: data?.description,
+      });
+      reFetch();
       setData({
         name: "",
         description: "",
@@ -113,15 +101,12 @@ function Ingredients() {
       return;
     }
 
-    // Update an existing item
-    const updatedModelData = [...modelData];
-    updatedModelData[index] = {
-      name: data.name,
-      description: data.description,
-    };
-
-    setModelData(updatedModelData);
-
+    const resp = await axios.put(`http://localhost:8000/ingredient/${id}`, {
+      name: data?.name,
+      Description: data?.description,
+    });
+    console.log(resp);
+    reFetch();
     setModifyMode(false);
 
     setData({
@@ -136,81 +121,78 @@ function Ingredients() {
 
   return (
     <>
-      {userInfo.role === "superadmin" ||
-        (userInfo.role === "admin" && (
-          <div>
-            {/* First pair of inputs */}
-            <form onSubmit={handleSubmit}>
-              <div className={classes.inputContainer}>
-                <div className={classes.labels}>
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Enter a name"
-                    value={data.name}
-                    onChange={handleFormChange}
-                  />
-                  {error.name && (
-                    <div className={classes.error}>{error.name}</div>
-                  )}
-                </div>
-                <div className={classes.labels}>
-                  <label>Description</label>
-                  <input
-                    type="text"
-                    name="description"
-                    placeholder="Enter a description"
-                    value={data.description}
-                    onChange={handleFormChange}
-                  />
-                  {error.description && (
-                    <div className={classes.error}>{error.description}</div>
-                  )}
-                </div>
-              </div>
-
-              <div className={`${classes.searchBar} ${classes.inputContainer}`}>
+      {(userInfo.role === "superadmin" || userInfo.role === "admin") && (
+        <div>
+          {/* First pair of inputs */}
+          <form onSubmit={handleSubmit}>
+            <div className={classes.inputContainer}>
+              <div className={classes.labels}>
+                <label>Name</label>
                 <input
                   type="text"
-                  name="search"
-                  placeholder="Search by name"
-                  value={searchText}
-                  onChange={handleSearch}
+                  name="name"
+                  placeholder="Enter a name"
+                  value={data.name}
+                  onChange={handleFormChange}
                 />
+                {error.name && (
+                  <div className={classes.error}>{error.name}</div>
+                )}
               </div>
+              <div className={classes.labels}>
+                <label>Description</label>
+                <input
+                  type="text"
+                  name="description"
+                  placeholder="Enter a description"
+                  value={data.description}
+                  onChange={handleFormChange}
+                />
+                {error.description && (
+                  <div className={classes.error}>{error.description}</div>
+                )}
+              </div>
+            </div>
 
-              <button
-                type="submit"
-                className={`${
-                  modifyMode ? classes.modifyButton : classes.addButton
-                }`}
-              >
-                {modifyMode ? "Modify" : "Add"}
-              </button>
-            </form>
-          </div>
-        ))}
+            <div className={`${classes.searchBar} ${classes.inputContainer}`}>
+              <input
+                type="text"
+                name="search"
+                placeholder="Search by name"
+                value={searchText}
+                onChange={handleSearch}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className={`${
+                modifyMode ? classes.modifyButton : classes.addButton
+              }`}
+            >
+              {modifyMode ? "Modify" : "Add"}
+            </button>
+          </form>
+        </div>
+      )}
       <Table
         data={filteredModelData}
+        isLoading={isLoading}
         columns={[
           { label: "Name", field: "name" },
-          { label: "Description", field: "description" },
+          { label: "Description", field: "Description" },
         ]}
-        onModify={(model, index) => {
+        onModify={(model) => {
           setModifyMode(true);
           setData({
             name: model.name,
-            description: model.description,
+            description: model.Description,
           });
-          setIndex(index);
+          setId(model._id);
         }}
-        onDelete={(index) => {
-          setModelData((prevData) => {
-            const updateModel = [...prevData];
-            updateModel.splice(index, 1);
-            return updateModel;
-          });
+        onDelete={async (model) => {
+          await axios.delete(`http://localhost:8000/ingredient/${model._id}`);
+          reFetch()
           setModifyMode(false);
           setData({
             name: "",

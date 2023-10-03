@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import classes from "../Css/models.module.css";
 import Table from "../table/table";
+import useFetch from "../../useFetch";
+import axios from "axios";
 
 function Procedures() {
-  const [modelData, setModelData] = useState(() => {
-    const savedModelDataJSON = localStorage.getItem("modelDataProcedures");
-    return savedModelDataJSON ? JSON.parse(savedModelDataJSON) : [];
-  });
+  const { modelData, isLoading, reFetch } = useFetch("procedure");
+
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [data, setData] = useState({
     name: "",
@@ -24,7 +24,7 @@ function Procedures() {
     steps: "",
   });
   const [modifyMode, setModifyMode] = useState(false);
-  const [index, setIndex] = useState();
+  const [id, setId] = useState();
 
   const [filteredModelData, setFilteredModelData] = useState([]);
 
@@ -36,15 +36,6 @@ function Procedures() {
     );
     setFilteredModelData(newData);
   }, [modelData, searchText]);
-
-  useEffect(() => {
-    try {
-      const modelDataJSON = JSON.stringify(modelData);
-      localStorage.setItem("modelDataProcedures", modelDataJSON);
-    } catch (error) {
-      console.error("Error saving data to localStorage:", error);
-    }
-  }, [modelData]);
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -63,7 +54,7 @@ function Procedures() {
     setError((prevState) => ({ ...prevState, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const emptyFields = [];
@@ -185,17 +176,14 @@ function Procedures() {
     }
 
     if (!modifyMode) {
-      setModelData([
-        ...modelData,
-        {
-          name: data.name,
-          description: data.description,
-          freezbeModel: data.freezbeModel,
-          testValidations: data.testValidations,
-          steps: data.steps,
-        },
-      ]);
-
+      await axios.post("http://localhost:8000/procedure", {
+        name: data?.name,
+        Description: data?.description,
+        FreezbeModel: data?.freezbeModel,
+        Steps: data?.steps,
+        TestValidations: data?.testValidations,
+      });
+      reFetch();
       setData({
         name: "",
         description: "",
@@ -207,17 +195,14 @@ function Procedures() {
       return;
     }
 
-    // Update an existing item
-    const updatedModelData = [...modelData];
-    updatedModelData[index] = {
-      name: data.name,
-      description: data.description,
-      freezbeModel: data.freezbeModel,
-      testValidations: data.testValidations,
-      steps: data.steps,
-    };
-
-    setModelData(updatedModelData);
+    await axios.put(`http://localhost:8000/procedure/${id}`, {
+      name: data?.name,
+      Description: data?.description,
+      FreezbeModel: data?.freezbeModel,
+      Steps: data?.steps,
+      TestValidations: data?.testValidations,
+    });
+    reFetch();
 
     setModifyMode(false);
 
@@ -236,133 +221,130 @@ function Procedures() {
 
   return (
     <>
-      {userInfo.role === "superadmin" ||
-        (userInfo.role === "admin" && (
-          <div>
-            {/* First pair of inputs */}
-            <form onSubmit={handleSubmit}>
-              <div className={classes.inputContainer}>
-                <div className={classes.labels}>
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Enter a name"
-                    value={data.name}
-                    onChange={handleFormChange}
-                  />
-                  {error.name && (
-                    <div className={classes.error}>{error.name}</div>
-                  )}
-                </div>
-                <div className={classes.labels}>
-                  <label>Description</label>
-                  <input
-                    type="text"
-                    name="description"
-                    placeholder="Enter a description"
-                    value={data.description}
-                    onChange={handleFormChange}
-                  />
-                  {error.description && (
-                    <div className={classes.error}>{error.description}</div>
-                  )}
-                </div>
-              </div>
-
-              {/* Second pair of inputs */}
-              <div className={classes.inputContainer}>
-                <div className={classes.labels}>
-                  <label>Freezbe Model</label>
-                  <input
-                    type="text"
-                    placeholder="Enter freezbe model"
-                    name="freezbeModel"
-                    value={data.freezbeModel}
-                    onChange={handleFormChange}
-                  />
-                  {error.freezbeModel && (
-                    <div className={classes.error}>{error.freezbeModel}</div>
-                  )}
-                </div>
-                <div className={classes.labels}>
-                  <label>Steps</label>
-                  <input
-                    type="text"
-                    name="steps"
-                    placeholder="Enter steps(separated by commas)"
-                    value={data.steps}
-                    onChange={handleFormChange}
-                  />
-                  {error.steps && (
-                    <div className={classes.error}>{error.steps}</div>
-                  )}
-                </div>
-              </div>
-
-              <div
-                className={`${classes.testValidations} ${classes.inputContainer} ${classes.labels}`}
-              >
-                <label>Test Validations</label>
+      {(userInfo.role === "superadmin" || userInfo.role === "admin") && (
+        <div>
+          {/* First pair of inputs */}
+          <form onSubmit={handleSubmit}>
+            <div className={classes.inputContainer}>
+              <div className={classes.labels}>
+                <label>Name</label>
                 <input
                   type="text"
-                  name="testValidations"
-                  placeholder="Enter test validations(separated by commas)"
-                  value={data.testValidations}
+                  name="name"
+                  placeholder="Enter a name"
+                  value={data.name}
                   onChange={handleFormChange}
                 />
-                {error.testValidations && (
-                  <div className={classes.error}>{error.testValidations}</div>
+                {error.name && (
+                  <div className={classes.error}>{error.name}</div>
                 )}
               </div>
-
-              <div className={`${classes.searchBar} ${classes.inputContainer}`}>
+              <div className={classes.labels}>
+                <label>Description</label>
                 <input
                   type="text"
-                  name="search"
-                  placeholder="Search by name"
-                  value={searchText}
-                  onChange={handleSearch}
+                  name="description"
+                  placeholder="Enter a description"
+                  value={data.description}
+                  onChange={handleFormChange}
                 />
+                {error.description && (
+                  <div className={classes.error}>{error.description}</div>
+                )}
               </div>
+            </div>
 
-              <button
-                type="submit"
-                className={`${
-                  modifyMode ? classes.modifyButton : classes.addButton
-                }`}
-              >
-                {modifyMode ? "Modify" : "Add"}
-              </button>
-            </form>
-          </div>
-        ))}
+            {/* Second pair of inputs */}
+            <div className={classes.inputContainer}>
+              <div className={classes.labels}>
+                <label>Freezbe Model</label>
+                <input
+                  type="text"
+                  placeholder="Enter freezbe model"
+                  name="freezbeModel"
+                  value={data.freezbeModel}
+                  onChange={handleFormChange}
+                />
+                {error.freezbeModel && (
+                  <div className={classes.error}>{error.freezbeModel}</div>
+                )}
+              </div>
+              <div className={classes.labels}>
+                <label>Steps</label>
+                <input
+                  type="text"
+                  name="steps"
+                  placeholder="Enter steps(separated by commas)"
+                  value={data.steps}
+                  onChange={handleFormChange}
+                />
+                {error.steps && (
+                  <div className={classes.error}>{error.steps}</div>
+                )}
+              </div>
+            </div>
+
+            <div
+              className={`${classes.testValidations} ${classes.inputContainer} ${classes.labels}`}
+            >
+              <label>Test Validations</label>
+              <input
+                type="text"
+                name="testValidations"
+                placeholder="Enter test validations(separated by commas)"
+                value={data.testValidations}
+                onChange={handleFormChange}
+              />
+              {error.testValidations && (
+                <div className={classes.error}>{error.testValidations}</div>
+              )}
+            </div>
+
+            <div className={`${classes.searchBar} ${classes.inputContainer}`}>
+              <input
+                type="text"
+                name="search"
+                placeholder="Search by name"
+                value={searchText}
+                onChange={handleSearch}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className={`${
+                modifyMode ? classes.modifyButton : classes.addButton
+              }`}
+            >
+              {modifyMode ? "Modify" : "Add"}
+            </button>
+          </form>
+        </div>
+      )}
       <Table
         data={filteredModelData}
+        isLoading={isLoading}
         columns={[
           { label: "Name", field: "name" },
-          { label: "Description", field: "description" },
-          { label: "Unit Price", field: "freezbeModel" },
-          { label: "Steps", field: "steps" },
-          { label: "Test Validations", field: "testValidations" },
+          { label: "Description", field: "Description" },
+          { label: "Freezbe Model", field: "FreezbeModel" },
+          { label: "Steps", field: "Steps" },
+          { label: "Test Validations", field: "TestValidations" },
         ]}
-        onModify={(model, index) => {
+        onModify={(model) => {
           setModifyMode(true);
           setData({
             name: model.name,
             description: model.description,
-            freezbeModel: model.freezbeModel,
-            testValidations: model.testValidations,
-            steps: model.steps,
+            freezbeModel: model.FreezbeModel,
+            testValidations: model.TestValidations,
+            steps: model.Steps,
           });
-          setIndex(index);
+          setId(model._id);
         }}
-        onDelete={(index) => {
-          setModelData((prevData) => {
-            const updateModel = [...prevData];
-            updateModel.splice(index, 1);
-            return updateModel;
-          });
+        onDelete={async (model) => {
+          await axios.delete(`http://localhost:8000/procedure/${model._id}`);
+          reFetch();
           setModifyMode(false);
           setData({
             name: "",

@@ -222,120 +222,119 @@ function Freezbe() {
 
   return (
     <>
-      {userInfo.role === "superadmin" ||
-        (userInfo.role === "admin" && (
-          <div>
-            {/* First pair of inputs */}
-            <form onSubmit={handleSubmit}>
-              <div className={classes.inputContainer}>
-                <div className={classes.labels}>
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Enter a name"
-                    value={data.name}
-                    onChange={handleFormChange}
-                  />
-                  {error.name && (
-                    <div className={classes.error}>{error.name}</div>
-                  )}
-                </div>
-                <div className={classes.labels}>
-                  <label>Description</label>
-                  <input
-                    type="text"
-                    name="description"
-                    placeholder="Enter a description"
-                    value={data.description}
-                    onChange={handleFormChange}
-                  />
-                  {error.description && (
-                    <div className={classes.error}>{error.description}</div>
-                  )}
-                </div>
-              </div>
-
-              {/* Second pair of inputs */}
-              <div className={classes.inputContainer}>
-                <div className={classes.labels}>
-                  <label>Unit Price</label>
-                  <input
-                    type="number"
-                    name="unitPrice"
-                    placeholder="Enter a unit price"
-                    value={data.unitPrice}
-                    onChange={handleFormChange}
-                  />
-                  {error.unitPrice && (
-                    <div className={classes.error}>{error.unitPrice}</div>
-                  )}
-                </div>
-                <div className={classes.labels}>
-                  <label>Range</label>
-                  <input
-                    type="number"
-                    name="range"
-                    placeholder="Enter a range"
-                    value={data.range}
-                    onChange={handleFormChange}
-                  />
-                  {error.range && (
-                    <div className={classes.error}>{error.range}</div>
-                  )}
-                </div>
-              </div>
-
-              {/* Third pair of inputs */}
-              <div className={classes.inputContainer}>
-                <div className={classes.labels}>
-                  <label>Ingredients</label>
-                  <input
-                    type="text"
-                    name="ingredients"
-                    placeholder="Enter ingredients"
-                    value={data.ingredients}
-                    onChange={handleFormChange}
-                  />
-                  {error.ingredients && (
-                    <div className={classes.error}>{error.ingredients}</div>
-                  )}
-                </div>
-                <div className={classes.labels}>
-                  <label>Weight</label>
-                  <input
-                    type="number"
-                    name="weight"
-                    placeholder="Enter a weight"
-                    value={data.weight}
-                    onChange={handleFormChange}
-                  />
-                  {error.weight && (
-                    <div className={classes.error}>{error.weight}</div>
-                  )}
-                </div>
-              </div>
-              <div className={`${classes.searchBar} ${classes.inputContainer}`}>
+      {(userInfo.role === "superadmin" || userInfo.role === "admin") && (
+        <div>
+          {/* First pair of inputs */}
+          <form onSubmit={handleSubmit}>
+            <div className={classes.inputContainer}>
+              <div className={classes.labels}>
+                <label>Name</label>
                 <input
                   type="text"
-                  name="search"
-                  placeholder="Search by name"
-                  value={searchText}
-                  onChange={handleSearch}
+                  name="name"
+                  placeholder="Enter a name"
+                  value={data.name}
+                  onChange={handleFormChange}
                 />
+                {error.name && (
+                  <div className={classes.error}>{error.name}</div>
+                )}
               </div>
+              <div className={classes.labels}>
+                <label>Description</label>
+                <input
+                  type="text"
+                  name="description"
+                  placeholder="Enter a description"
+                  value={data.description}
+                  onChange={handleFormChange}
+                />
+                {error.description && (
+                  <div className={classes.error}>{error.description}</div>
+                )}
+              </div>
+            </div>
 
-              <button
-                type="submit"
-                className={`${
-                  modifyMode ? classes.modifyButton : classes.addButton
-                }`}
-              >
-                {modifyMode ? "Modify" : "Add"}
-              </button>
-            </form>
-          </div>
-        ))}
+            {/* Second pair of inputs */}
+            <div className={classes.inputContainer}>
+              <div className={classes.labels}>
+                <label>Unit Price</label>
+                <input
+                  type="number"
+                  name="unitPrice"
+                  placeholder="Enter a unit price"
+                  value={data.unitPrice}
+                  onChange={handleFormChange}
+                />
+                {error.unitPrice && (
+                  <div className={classes.error}>{error.unitPrice}</div>
+                )}
+              </div>
+              <div className={classes.labels}>
+                <label>Range</label>
+                <input
+                  type="number"
+                  name="range"
+                  placeholder="Enter a range"
+                  value={data.range}
+                  onChange={handleFormChange}
+                />
+                {error.range && (
+                  <div className={classes.error}>{error.range}</div>
+                )}
+              </div>
+            </div>
+
+            {/* Third pair of inputs */}
+            <div className={classes.inputContainer}>
+              <div className={classes.labels}>
+                <label>Ingredients</label>
+                <input
+                  type="text"
+                  name="ingredients"
+                  placeholder="Enter ingredients"
+                  value={data.ingredients}
+                  onChange={handleFormChange}
+                />
+                {error.ingredients && (
+                  <div className={classes.error}>{error.ingredients}</div>
+                )}
+              </div>
+              <div className={classes.labels}>
+                <label>Weight</label>
+                <input
+                  type="number"
+                  name="weight"
+                  placeholder="Enter a weight"
+                  value={data.weight}
+                  onChange={handleFormChange}
+                />
+                {error.weight && (
+                  <div className={classes.error}>{error.weight}</div>
+                )}
+              </div>
+            </div>
+            <div className={`${classes.searchBar} ${classes.inputContainer}`}>
+              <input
+                type="text"
+                name="search"
+                placeholder="Search by name"
+                value={searchText}
+                onChange={handleSearch}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className={`${
+                modifyMode ? classes.modifyButton : classes.addButton
+              }`}
+            >
+              {modifyMode ? "Modify" : "Add"}
+            </button>
+          </form>
+        </div>
+      )}
       <Table
         data={filteredModelData}
         columns={[

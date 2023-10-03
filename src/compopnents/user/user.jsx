@@ -1,53 +1,41 @@
 import React, { useState, useEffect } from "react";
 import classes from "../Css/models.module.css";
 import Table from "../table/table";
+import useFetch from "../../useFetch";
+import axios from "axios";
 
 function User() {
-  const [modelData, setModelData] = useState(() => {
-    const savedModelDataJSON = localStorage.getItem("modelDataProcedures");
-    return savedModelDataJSON ? JSON.parse(savedModelDataJSON) : [];
-  });
-
+  const { modelData, isLoading, reFetch } = useFetch("user");
   const [data, setData] = useState({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
     role: "user",
   });
-
   const [searchText, setSearchText] = useState("");
   const [error, setError] = useState({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
     role: "",
   });
-  
+
   const [modifyMode, setModifyMode] = useState(false);
-  const [index, setIndex] = useState();
+  const [id, setId] = useState();
 
   const [filteredModelData, setFilteredModelData] = useState([]);
 
   useEffect(() => {
     // Filter the data based on the search text
-    const newData = modelData.filter(
+    const newData = modelData?.filter(
       (item) =>
-        item.firstName &&
-        item.firstName.toLowerCase().includes(searchText.toLowerCase())
+        item.first_name &&
+        item.first_name.toLowerCase().includes(searchText.toLowerCase())
     );
     setFilteredModelData(newData);
   }, [modelData, searchText]);
-
-  useEffect(() => {
-    try {
-      const modelDataJSON = JSON.stringify(modelData);
-      localStorage.setItem("modelDataProcedures", modelDataJSON);
-    } catch (error) {
-      console.error("Error saving data to localStorage:", error);
-    }
-  }, [modelData]);
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -56,56 +44,48 @@ function User() {
     setError((prevState) => ({ ...prevState, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const emptyFields = [];
 
-    if (data.firstName.length === 0) {
+    if (data.first_name?.length === 0) {
       setError((prevData) => ({
         ...prevData,
-        firstName: "Please enter a first name",
+        first_name: "Please enter a first name",
       }));
       emptyFields.push("FirstName");
-    } else if (data.firstName.length < 3) {
+    } else if (data.first_name?.length < 3) {
       setError((prevData) => ({
         ...prevData,
-        firstName: "First name should be at least 3 characters",
+        first_name: "First name should be at least 3 characters",
       }));
       emptyFields.push("FirstName");
     }
 
-    if (data.lastName.length === 0) {
+    if (data.last_name?.length === 0) {
       setError((prevData) => ({
         ...prevData,
-        lastName: "Please enter a last name",
+        last_name: "Please enter a last name",
       }));
       emptyFields.push("LastName");
-    } else if (data.lastName.length < 3) {
+    } else if (data.last_name?.length < 3) {
       setError((prevData) => ({
         ...prevData,
-        lastName: "Last name should be at least 3 characters",
+        last_name: "Last name should be at least 3 characters",
       }));
       emptyFields.push("LastName");
     }
 
-    if (data.email.length === 0) {
+    if (data.email?.length === 0) {
       setError((prevData) => ({
         ...prevData,
         email: "Please enter an email",
       }));
       emptyFields.push("Email");
-    } else if (
-      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.email)
-    ) {
-      setError((prevData) => ({
-        ...prevData,
-        email: "Please enter a valid email address",
-      }));
-      emptyFields.push("Email");
     }
 
-    if (data.password.length === 0) {
+    if (data.password?.length === 0) {
       setError((prevData) => ({
         ...prevData,
         password: "Please enter a password",
@@ -113,7 +93,7 @@ function User() {
       emptyFields.push("Password");
     }
 
-    if (data.role.length === 0) {
+    if (data.role?.length === 0) {
       setError((prevData) => ({
         ...prevData,
         role: "Please select a role",
@@ -121,25 +101,22 @@ function User() {
       emptyFields.push("Role");
     }
 
-    if (emptyFields.length > 0) {
+    if (emptyFields?.length > 0) {
       return;
     }
 
     if (!modifyMode) {
-      setModelData([
-        ...modelData,
-        {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          password: data.password,
-          role: data.role,
-        },
-      ]);
-
+      await axios.post("http://localhost:8000/user", {
+        first_name: data?.first_name,
+        last_name: data?.last_name,
+        email: data?.email,
+        password: data?.password,
+        role: data?.role,
+      });
+      reFetch();
       setData({
-        firstName: "",
-        lastName: "",
+        first_name: "",
+        last_name: "",
         email: "",
         password: "",
         role: "user",
@@ -149,22 +126,19 @@ function User() {
     }
 
     // Update an existing item
-    const updatedModelData = [...modelData];
-    updatedModelData[index] = {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      password: data.password,
-      role: data.role,
-    };
-
-    setModelData(updatedModelData);
-
+    await axios.put(`http://localhost:8000/user/${id}`, {
+      first_name: data?.first_name,
+      last_name: data?.last_name,
+      email: data?.email,
+      password: data?.password,
+      role: data?.role,
+    });
+    reFetch();
     setModifyMode(false);
 
     setData({
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       email: "",
       password: "",
       role: "user",
@@ -185,26 +159,26 @@ function User() {
               <label>First Name</label>
               <input
                 type="text"
-                name="firstName"
+                name="first_name"
                 placeholder="Enter a first name"
-                value={data.firstName}
+                value={data.first_name}
                 onChange={handleFormChange}
               />
-              {error.firstName && (
-                <div className={classes.error}>{error.firstName}</div>
+              {error.first_name && (
+                <div className={classes.error}>{error.first_name}</div>
               )}
             </div>
             <div className={classes.labels}>
               <label>Last Name</label>
               <input
                 type="text"
-                name="lastName"
+                name="last_name"
                 placeholder="Enter a last name"
-                value={data.lastName}
+                value={data.last_name}
                 onChange={handleFormChange}
               />
-              {error.lastName && (
-                <div className={classes.error}>{error.lastName}</div>
+              {error.last_name && (
+                <div className={classes.error}>{error.last_name}</div>
               )}
             </div>
           </div>
@@ -245,6 +219,7 @@ function User() {
               <label>Role</label>
               <select
                 name="role"
+                className={classes.dropDown}
                 value={data.role}
                 onChange={handleFormChange}
               >
@@ -252,15 +227,12 @@ function User() {
                 <option value="admin">Admin</option>
                 <option value="superadmin">Superadmin</option>
               </select>
-              {error.role && (
-                <div className={classes.error}>{error.role}</div>
-              )}
+              {error.role && <div className={classes.error}>{error.role}</div>}
             </div>
           </div>
 
           <div className={`${classes.searchBar} ${classes.inputContainer}`}>
-           
-          <input
+            <input
               type="text"
               name="search"
               placeholder="Search by first name"
@@ -281,33 +253,30 @@ function User() {
       </div>
       <Table
         data={filteredModelData}
+        isLoading={isLoading}
         columns={[
-          { label: "First Name", field: "firstName" },
-          { label: "Last Name", field: "lastName" },
+          { label: "First Name", field: "first_name" },
+          { label: "Last Name", field: "last_name" },
           { label: "Email", field: "email" },
           { label: "Role", field: "role" },
         ]}
-        onModify={(model, index) => {
+        onModify={(model) => {
           setModifyMode(true);
           setData({
-            firstName: model.firstName,
-            lastName: model.lastName,
+            first_name: model.first_name,
+            last_name: model.last_name,
             email: model.email,
-            password: model.password,
             role: model.role,
           });
-          setIndex(index);
+          setId(model._id);
         }}
-        onDelete={(index) => {
-          setModelData((prevData) => {
-            const updateModel = [...prevData];
-            updateModel.splice(index, 1);
-            return updateModel;
-          });
+        onDelete={async (model) => {
+          await axios.delete(`http://localhost:8000/user/${model._id}`);
+          reFetch()
           setModifyMode(false);
           setData({
-            firstName: "",
-            lastName: "",
+            first_name: "",
+            last_name: "",
             email: "",
             password: "",
             role: "user",
