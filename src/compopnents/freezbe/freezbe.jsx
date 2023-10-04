@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import classes from "../Css/models.module.css";
 import Table from "../table/table";
+import useFetch from "../../useFetch";
+import axios from "axios";
 
 function Freezbe() {
-  const [modelData, setModelData] = useState(() => {
-    const savedModelDataJSON = localStorage.getItem("modelDataFreezbe");
-    return savedModelDataJSON ? JSON.parse(savedModelDataJSON) : [];
-  });
+  const { modelData, isLoading, reFetch } = useFetch("freezbe");
+  const { modelData: ingredients } = useFetch("ingredient");
+  const [ingredientsData, setIngredientsData] = useState([ingredients]);
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [data, setData] = useState({
     name: "",
@@ -26,7 +27,11 @@ function Freezbe() {
     weight: "",
   });
   const [modifyMode, setModifyMode] = useState(false);
-  const [index, setIndex] = useState();
+  const [id, setId] = useState();
+
+  useEffect(() => {
+    setIngredientsData(ingredients);
+  }, [ingredients]);
 
   const [filteredModelData, setFilteredModelData] = useState([]);
 
@@ -39,15 +44,6 @@ function Freezbe() {
     setFilteredModelData(newData);
   }, [modelData, searchText]);
 
-  useEffect(() => {
-    try {
-      const modelDataJSON = JSON.stringify(modelData);
-      localStorage.setItem("modelDataFreezbe", modelDataJSON);
-    } catch (error) {
-      console.error("Error saving data to localStorage:", error);
-    }
-  }, [modelData]);
-
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setData((prevState) => ({ ...prevState, [name]: value }));
@@ -55,7 +51,7 @@ function Freezbe() {
     setError((prevState) => ({ ...prevState, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const emptyFields = [];
@@ -167,18 +163,15 @@ function Freezbe() {
     }
 
     if (!modifyMode) {
-      setModelData([
-        ...modelData,
-        {
-          name: data.name,
-          description: data.description,
-          unitPrice: data.unitPrice,
-          range: data.range,
-          ingredients: data.ingredients,
-          weight: data.weight,
-        },
-      ]);
-
+      await axios.post("http://localhost:8000/freezbe", {
+        name: data?.name,
+        Description: data?.description,
+        UnitPrice: data?.unitPrice,
+        Range: data?.range,
+        Ingredients: data?.ingredients,
+        Weight: data?.weight,
+      });
+      reFetch();
       setData({
         name: "",
         description: "",
@@ -191,19 +184,15 @@ function Freezbe() {
       return;
     }
 
-    // Update an existing item
-    const updatedModelData = [...modelData];
-    updatedModelData[index] = {
-      name: data.name,
-      description: data.description,
-      unitPrice: data.unitPrice,
-      range: data.range,
-      ingredients: data.ingredients,
-      weight: data.weight,
-    };
-
-    setModelData(updatedModelData);
-
+    await axios.put(`http://localhost:8000/freezbe/${id}`, {
+      name: data?.name,
+      Description: data?.description,
+      UnitPrice: data?.unitPrice,
+      Range: data?.range,
+      Ingredients: data?.ingredients,
+      Weight: data?.weight,
+    });
+    reFetch();
     setModifyMode(false);
 
     setData({
@@ -219,7 +208,7 @@ function Freezbe() {
   const handleSearch = (e) => {
     setSearchText(e.target.value);
   };
-
+  console.log(data.ingredients);
   return (
     <>
       {(userInfo.role === "superadmin" || userInfo.role === "admin") && (
@@ -289,17 +278,36 @@ function Freezbe() {
             <div className={classes.inputContainer}>
               <div className={classes.labels}>
                 <label>Ingredients</label>
-                <input
-                  type="text"
+                <select
                   name="ingredients"
-                  placeholder="Enter ingredients"
                   value={data.ingredients}
-                  onChange={handleFormChange}
-                />
-                {error.ingredients && (
-                  <div className={classes.error}>{error.ingredients}</div>
-                )}
+                  onChange={(e) => {
+                    // Find the selected ingredient object based on the value
+                    const selectedIngredient = ingredientsData.find(
+                      (ingredient) => ingredient.name === e.target.value
+                    );
+
+                    // Set the name of the selected ingredient or an empty string if no selection
+                    const selectedIngredientName = selectedIngredient
+                      ? selectedIngredient.name
+                      : "";
+
+                    setData((prevState) => ({
+                      ...prevState,
+                      ingredients: selectedIngredientName,
+                    }));
+                  }}
+                >
+                  <option value="">Select an ingredient</option>
+                  {ingredientsData &&
+                    ingredientsData.map((ingredient, index) => (
+                      <option key={index} value={ingredient.name}>
+                        {ingredient.name}
+                      </option>
+                    ))}
+                </select>
               </div>
+
               <div className={classes.labels}>
                 <label>Weight</label>
                 <input
@@ -337,15 +345,16 @@ function Freezbe() {
       )}
       <Table
         data={filteredModelData}
+        isLoading={isLoading}
         columns={[
           { label: "Name", field: "name" },
-          { label: "Description", field: "description" },
-          { label: "Unit Price", field: "unitPrice" },
-          { label: "Range", field: "range" },
-          { label: "Ingredients", field: "ingredients" },
-          { label: "Weight", field: "weight" },
+          { label: "Description", field: "Description" },
+          { label: "Unit Price", field: "UnitPrice" },
+          { label: "Range", field: "Range" },
+          { label: "Ingredients", field: "Ingredients" },
+          { label: "Weight", field: "Weight" },
         ]}
-        onModify={(model, index) => {
+        onModify={(model) => {
           setModifyMode(true);
           setData({
             name: model.name,
@@ -355,14 +364,11 @@ function Freezbe() {
             ingredients: model.ingredients,
             weight: model.weight,
           });
-          setIndex(index);
+          setId(model._id);
         }}
-        onDelete={(index) => {
-          setModelData((prevData) => {
-            const updateModel = [...prevData];
-            updateModel.splice(index, 1);
-            return updateModel;
-          });
+        onDelete={async (model) => {
+          await axios.delete(`http://localhost:8000/freezbe/${model._id}`);
+          reFetch();
           setModifyMode(false);
           setData({
             name: "",
