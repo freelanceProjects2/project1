@@ -6,7 +6,8 @@ import axios from "axios";
 
 function Procedures() {
   const { modelData, isLoading, reFetch } = useFetch("procedure");
-
+  const { modelData: freezbe } = useFetch("ingredient");
+  const [freezbeData, setFreezbeData] = useState([freezbe]);
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [data, setData] = useState({
     name: "",
@@ -27,6 +28,10 @@ function Procedures() {
   const [id, setId] = useState();
 
   const [filteredModelData, setFilteredModelData] = useState([]);
+
+  useEffect(() => {
+    setFreezbeData(freezbe);
+  }, [freezbe]);
 
   useEffect(() => {
     // Filter the data based on the search text
@@ -101,21 +106,9 @@ function Procedures() {
     if (!data.freezbeModel) {
       setError((prevData) => ({
         ...prevData,
-        freezbeModel: "Please enter a frezzbe model",
+        freezbeModel: "Please select a frezzbe",
       }));
       emptyFields.push("FreezbeModel");
-    } else if (data.freezbeModel.length < 3) {
-      setError((prevData) => ({
-        ...prevData,
-        freezbeModel: "Freezbe model should be at least 3 characters",
-      }));
-      emptyFields.push("FreezbeModel");
-    } else if (typeof data.freezbeModel === "number") {
-      setError((prevData) => ({
-        ...prevData,
-        description: "Description should be a string",
-      }));
-      emptyFields.push("Description");
     }
 
     if (!data.steps.length) {
@@ -257,14 +250,39 @@ function Procedures() {
             {/* Second pair of inputs */}
             <div className={classes.inputContainer}>
               <div className={classes.labels}>
-                <label>Freezbe Model</label>
-                <input
-                  type="text"
-                  placeholder="Enter freezbe model"
-                  name="freezbeModel"
+                <label>Freezbe</label>
+                <select
+                  name="ingredients"
                   value={data.freezbeModel}
-                  onChange={handleFormChange}
-                />
+                  onChange={(e) => {
+                    // Find the selected ingredient object based on the value
+                    const selectedFeezbe = freezbeData.find(
+                      (ingredient) => ingredient.name === e.target.value
+                    );
+
+                    // Set the name of the selected ingredient or an empty string if no selection
+                    const selectedIngredientName = selectedFeezbe
+                      ? selectedFeezbe.name
+                      : "";
+
+                    setData((prevState) => ({
+                      ...prevState,
+                      freezbeModel: selectedIngredientName,
+                    }));
+                    setError((prevData) => ({
+                      ...prevData,
+                      freezbeModel: "",
+                    }));
+                  }}
+                >
+                  <option value="">Select an ingredient</option>
+                  {freezbeData &&
+                    freezbeData.map((ingredient, index) => (
+                      <option key={index} value={ingredient.name}>
+                        {ingredient.name}
+                      </option>
+                    ))}
+                </select>
                 {error.freezbeModel && (
                   <div className={classes.error}>{error.freezbeModel}</div>
                 )}
@@ -335,7 +353,7 @@ function Procedures() {
           setModifyMode(true);
           setData({
             name: model.name,
-            description: model.description,
+            description: model.Description,
             freezbeModel: model.FreezbeModel,
             testValidations: model.TestValidations,
             steps: model.Steps,

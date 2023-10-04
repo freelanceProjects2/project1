@@ -10,7 +10,11 @@ const ContactUs = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPhoneNumber("");
+    setMessage("");
     // Send the contact form data to your server here
   };
 
@@ -26,15 +30,12 @@ const ContactUs = () => {
         <div className="responsive-container-block container">
           <div className="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12 left-one">
             <div className="content-box">
-              <p className="text-blk section-head">
-                killerBee
-               
-              </p>
+              <p className="text-blk section-head">killerBee</p>
               <p className="description-contact">
-                  {" "}
-                  If you have any questions or inquiries, please feel free to
-                  reach out to Killer Bee Company
-                </p>
+                {" "}
+                If you have any questions or inquiries, please feel free to
+                reach out to Killer Bee Company
+              </p>
               <div className="icons-container">
                 <a
                   className="share-icon"

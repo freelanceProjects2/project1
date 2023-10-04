@@ -127,19 +127,7 @@ function Freezbe() {
     if (!data.ingredients) {
       setError((prevData) => ({
         ...prevData,
-        ingredients: "Please enter ingredients",
-      }));
-      emptyFields.push("Ingredients");
-    } else if (data.ingredients.length < 3) {
-      setError((prevData) => ({
-        ...prevData,
-        ingredients: "Ingredients should be at least 3 characters",
-      }));
-      emptyFields.push("Ingredients");
-    } else if (typeof data.ingredients === "number") {
-      setError((prevData) => ({
-        ...prevData,
-        ingredients: "Ingredients should be a string",
+        ingredients: "Please select an ingredient",
       }));
       emptyFields.push("Ingredients");
     }
@@ -208,7 +196,7 @@ function Freezbe() {
   const handleSearch = (e) => {
     setSearchText(e.target.value);
   };
-  console.log(data.ingredients);
+
   return (
     <>
       {(userInfo.role === "superadmin" || userInfo.role === "admin") && (
@@ -296,6 +284,10 @@ function Freezbe() {
                       ...prevState,
                       ingredients: selectedIngredientName,
                     }));
+                    setError((prevData) => ({
+                      ...prevData,
+                      ingredients: "",
+                    }));
                   }}
                 >
                   <option value="">Select an ingredient</option>
@@ -306,6 +298,9 @@ function Freezbe() {
                       </option>
                     ))}
                 </select>
+                {error.ingredients && (
+                  <div className={classes.error}>{error.ingredients}</div>
+                )}
               </div>
 
               <div className={classes.labels}>
@@ -358,11 +353,11 @@ function Freezbe() {
           setModifyMode(true);
           setData({
             name: model.name,
-            description: model.description,
-            unitPrice: model.unitPrice,
-            range: model.range,
-            ingredients: model.ingredients,
-            weight: model.weight,
+            description: model.Description,
+            unitPrice: model.UnitPrice,
+            range: model.Range,
+            ingredients: model.Ingredients,
+            weight: model.Weight,
           });
           setId(model._id);
         }}
