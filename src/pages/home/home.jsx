@@ -5,14 +5,25 @@ import Ingredients from "../../compopnents/ingreedients/ingredients";
 import Procedures from "../../compopnents/procedures/procedures";
 import User from "../../compopnents/user/user";
 
-function Home() {
+
+export default function Home() {
   // State to track the active component
   const [activeComponent, setActiveComponent] = useState("Ingredients");
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  
+  // Define the handleLogout function
+  const handleLogout = () => {
+    // Clear user info from localStorage (if needed)
+    localStorage.removeItem("userInfo");
+
+// Redirect to the "/entry" page
+window.location.href = '/';  };
+
   // Function to set the active component
   const setActive = (component) => {
     setActiveComponent(component);
   };
+  const isSuperAdmin = userInfo && userInfo.role === "superadmin";
 
   return (
     <>
@@ -61,8 +72,24 @@ function Home() {
           <User />
         )}
       </div>
+      <a
+        href="#"
+        style={{
+          position: 'absolute',
+          bottom: '30px',
+          left: '10px',
+          display: 'flex',
+          alignItems: 'center',
+          textDecoration: 'none',
+          color: 'white', // Initial color
+        }}
+        onMouseEnter={(e) => (e.target.style.color = 'yellow')} // Color on hover
+        onMouseLeave={(e) => (e.target.style.color = 'white')} // Color on hover out
+        onClick={handleLogout} // Call the handleLogout function on click
+      >
+        <i className="fas fa-sign-out-alt" style={{ marginRight: '5px' }}></i>
+        Logout
+      </a>
     </>
   );
 }
-
-export default Home;
